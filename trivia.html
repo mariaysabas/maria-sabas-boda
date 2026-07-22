@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trivia — María & Sabas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-page">
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+      M &amp; S
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
+    <ul id="navlinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="historia.html">Nuestra Historia</a></li>
+      <li><a href="detalles.html">Detalles</a></li>
+      <li><a href="viaje.html">Alojamiento</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="trivia.html" aria-current="page">Trivia</a></li>
+      <li><a href="confirmacion.html">Confirmación</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Solo por diversión</div>
+  <h1>¿Cuánto nos conocéis?</h1>
+</div>
+<main>
+<section>
+  <div class="wrap">
+    <div class="quiz-card">
+      <div class="quiz-progress" id="quiz-progress">Pregunta 1 de 5</div>
+      <div class="quiz-q" id="quiz-q"></div>
+      <div class="quiz-opts" id="quiz-opts"></div>
+      <div class="quiz-footer">
+        <div class="quiz-score" id="quiz-score">Puntos: 0</div>
+        <button class="btn ghost" id="quiz-next" style="display:none;">Siguiente pregunta</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <svg class="sunflower-logo" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
+  <div>24 de abril, 2027 &middot; Salamanca</div>
+</footer>
+<script>
+  // Edita estas preguntas para que sean sobre vosotros.
+  const quiz = [
+    { q: "¿Dónde os conocisteis?", opts: ["En una cafetería","En clase","Por amigos en común","En otra boda"], correct: 2 },
+    { q: "¿Quién dijo 'te quiero' primero?", opts: ["María","Sabas","Los dos a la vez","Todavía discuten sobre esto"], correct: 0 },
+    { q: "¿Cuál es vuestro plan de cita favorito?", opts: ["Maratón de pelis","Probar un restaurante nuevo","Senderismo","Juegos de mesa en casa"], correct: 1 },
+    { q: "¿Dónde fue la pedida de mano?", opts: ["De viaje","En casa","En un restaurante especial","De excursión"], correct: 3 },
+    { q: "¿Cuál es la canción de vuestro primer baile?", opts: ["Un clásico de los 90","La que sonaba en la primera cita","La banda sonora de una peli que visteis juntos","¡Sorpresa, lo veréis ese día!"], correct: 3 }
+  ];
+  let qi = 0, score = 0;
+
+  function renderQuestion(){
+    const item = quiz[qi];
+    document.getElementById('quiz-progress').textContent = `Pregunta ${qi+1} de ${quiz.length}`;
+    document.getElementById('quiz-q').textContent = item.q;
+    document.getElementById('quiz-score').textContent = `Puntos: ${score}`;
+    document.getElementById('quiz-next').style.display = 'none';
+    const optsEl = document.getElementById('quiz-opts');
+    optsEl.innerHTML = '';
+    item.opts.forEach((opt, idx) => {
+      const b = document.createElement('button');
+      b.className = 'quiz-opt';
+      b.textContent = opt;
+      b.addEventListener('click', () => selectAnswer(idx));
+      optsEl.appendChild(b);
+    });
+  }
+
+  function selectAnswer(idx){
+    const item = quiz[qi];
+    const buttons = document.querySelectorAll('.quiz-opt');
+    buttons.forEach((b, i) => {
+      b.disabled = true;
+      if (i === item.correct) b.classList.add('correct');
+      else if (i === idx) b.classList.add('wrong');
+    });
+    if (idx === item.correct) score++;
+    document.getElementById('quiz-score').textContent = `Puntos: ${score}`;
+    if (qi < quiz.length - 1) {
+      document.getElementById('quiz-next').style.display = 'inline-block';
+    } else {
+      document.getElementById('quiz-progress').textContent = `¡Completado! Puntuación final: ${score} / ${quiz.length}`;
+    }
+  }
+
+  document.getElementById('quiz-next').addEventListener('click', () => {
+    qi++;
+    renderQuestion();
+  });
+
+  renderQuestion();
+</script>
+</body>
+</html>

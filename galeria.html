@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galería — María & Sabas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-page">
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+      M &amp; S
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
+    <ul id="navlinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="historia.html">Nuestra Historia</a></li>
+      <li><a href="detalles.html">Detalles</a></li>
+      <li><a href="viaje.html">Alojamiento</a></li>
+      <li><a href="galeria.html" aria-current="page">Galería</a></li>
+      <li><a href="trivia.html">Trivia</a></li>
+      <li><a href="confirmacion.html">Confirmación</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Algunos de nuestros momentos</div>
+  <h1>Galería</h1>
+</div>
+<main>
+<section>
+  <div class="wrap">
+    <div class="gallery-toolbar">
+      <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeELmzHjRR6jxcF8aQDGj0THPV5Ynl_x4T7cW-JLK0Nj5GIEw/viewform" target="_blank" rel="noopener">Subir tus fotos y vídeos</a>
+      <button class="btn ghost" id="gallery-refresh">Actualizar</button>
+    </div>
+
+    <div class="gallery-section">
+      <h2 class="gallery-subhead">Fotos</h2>
+      <div class="gallery-grid" id="gallery-grid-photos">
+        <div class="gallery-status">Cargando fotos&hellip;</div>
+      </div>
+      <div class="gallery-loadmore">
+        <button class="btn ghost" id="load-more-photos" style="display:none;">Cargar más fotos</button>
+      </div>
+    </div>
+
+    <div class="gallery-section">
+      <h2 class="gallery-subhead">Vídeos</h2>
+      <div class="gallery-grid" id="gallery-grid-videos">
+        <div class="gallery-status">Cargando vídeos&hellip;</div>
+      </div>
+      <div class="gallery-loadmore">
+        <button class="btn ghost" id="load-more-videos" style="display:none;">Cargar más vídeos</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="Cerrar">&times;</button>
+  <img id="lightbox-img" src="" alt="Foto de la boda ampliada" style="display:none;">
+  <iframe id="lightbox-video" src="" style="display:none;" allow="autoplay" allowfullscreen></iframe>
+</div>
+
+<footer>
+  <svg class="sunflower-logo" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
+  <div>24 de abril, 2027 &middot; Salamanca</div>
+</footer>
+
+<script>
+  // ---- Galería en directo desde Google Drive ----
+  // Para cambiar la carpeta o la clave, edita solo estas dos líneas:
+  const DRIVE_API_KEY = "AIzaSyAG4byz5s9mopJxosZ3Cz8Wm6s245QL6-A";
+  const DRIVE_FOLDER_ID = "1cIBrMNFRiooyJpw-B5QmIMw1GVS_dMDyWVhs_yY04bYgOW-mwnvv3qzB_Q44Gd6UELfZpk00";
+  const PAGE_SIZE = 20; // cuántas tarjetas se muestran cada vez, en fotos y en vídeos
+
+  const photosGrid = document.getElementById('gallery-grid-photos');
+  const videosGrid = document.getElementById('gallery-grid-videos');
+  const loadMorePhotosBtn = document.getElementById('load-more-photos');
+  const loadMoreVideosBtn = document.getElementById('load-more-videos');
+  const refreshBtn = document.getElementById('gallery-refresh');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxVideo = document.getElementById('lightbox-video');
+  const lightboxClose = document.getElementById('lightbox-close');
+
+  let allPhotos = [];
+  let allVideos = [];
+  let photosShown = 0;
+  let videosShown = 0;
+
+  async function loadGallery(){
+    photosGrid.innerHTML = '<div class="gallery-status">Cargando fotos&hellip;</div>';
+    videosGrid.innerHTML = '<div class="gallery-status">Cargando vídeos&hellip;</div>';
+    loadMorePhotosBtn.style.display = 'none';
+    loadMoreVideosBtn.style.display = 'none';
+
+    try {
+      const url = `https://www.googleapis.com/drive/v3/files?q='${DRIVE_FOLDER_ID}'+in+parents+and+(mimeType+contains+'image/'+or+mimeType+contains+'video/')+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,createdTime)&orderBy=createdTime+desc&pageSize=1000&key=${DRIVE_API_KEY}`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Drive API error ' + res.status);
+      const data = await res.json();
+      const files = data.files || [];
+
+      allPhotos = files.filter(f => f.mimeType && f.mimeType.startsWith('image/'));
+      allVideos = files.filter(f => f.mimeType && f.mimeType.startsWith('video/'));
+      photosShown = 0;
+      videosShown = 0;
+
+      renderMorePhotos();
+      renderMoreVideos();
+    } catch (err){
+      console.error(err);
+      const msg = '<div class="gallery-status">No se han podido cargar los archivos ahora mismo. Comprueba que la carpeta de Drive siga compartida como "Cualquier persona con el enlace" y que la clave de API sea correcta.</div>';
+      photosGrid.innerHTML = msg;
+      videosGrid.innerHTML = '';
+    }
+  }
+
+  function renderMorePhotos(){
+    if (photosShown === 0) photosGrid.innerHTML = '';
+    if (allPhotos.length === 0){
+      photosGrid.innerHTML = '<div class="gallery-status">Todavía no hay fotos. ¡Sé el primero en subir una!</div>';
+      return;
+    }
+    const next = allPhotos.slice(photosShown, photosShown + PAGE_SIZE);
+    next.forEach(file => {
+      const smallSrc = file.thumbnailLink;
+      const bigSrc = smallSrc ? smallSrc.replace(/=s\d+$/, '=s1600') : '';
+      const btn = document.createElement('button');
+      btn.className = 'gallery-photo';
+      btn.setAttribute('aria-label', 'Ver foto ampliada: ' + (file.name || ''));
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.src = smallSrc;
+      img.alt = file.name || 'Foto de la boda';
+      btn.appendChild(img);
+      btn.addEventListener('click', () => openLightboxImage(bigSrc || smallSrc));
+      photosGrid.appendChild(btn);
+    });
+    photosShown += next.length;
+    loadMorePhotosBtn.style.display = (photosShown < allPhotos.length) ? 'inline-block' : 'none';
+  }
+
+  function renderMoreVideos(){
+    if (videosShown === 0) videosGrid.innerHTML = '';
+    if (allVideos.length === 0){
+      videosGrid.innerHTML = '<div class="gallery-status">Todavía no hay vídeos. ¡Sé el primero en subir uno!</div>';
+      return;
+    }
+    const next = allVideos.slice(videosShown, videosShown + PAGE_SIZE);
+    next.forEach(file => {
+      const btn = document.createElement('button');
+      btn.className = 'gallery-photo gallery-video-tile';
+      btn.setAttribute('aria-label', 'Reproducir vídeo: ' + (file.name || ''));
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.src = file.thumbnailLink || '';
+      img.alt = file.name || 'Vídeo de la boda';
+      const play = document.createElement('span');
+      play.className = 'play-icon';
+      play.innerHTML = '&#9658;';
+      btn.appendChild(img);
+      btn.appendChild(play);
+      btn.addEventListener('click', () => openLightboxVideo(file.id));
+      videosGrid.appendChild(btn);
+    });
+    videosShown += next.length;
+    loadMoreVideosBtn.style.display = (videosShown < allVideos.length) ? 'inline-block' : 'none';
+  }
+
+  function openLightboxImage(src){
+    lightboxVideo.src = '';
+    lightboxVideo.style.display = 'none';
+    lightboxImg.style.display = 'block';
+    lightboxImg.src = src;
+    lightbox.classList.add('open');
+  }
+  function openLightboxVideo(fileId){
+    lightboxImg.style.display = 'none';
+    lightboxImg.src = '';
+    lightboxVideo.style.display = 'block';
+    lightboxVideo.src = `https://drive.google.com/file/d/${fileId}/preview`;
+    lightbox.classList.add('open');
+  }
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightboxImg.src = '';
+    lightboxVideo.src = '';
+  }
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+  refreshBtn.addEventListener('click', loadGallery);
+  loadMorePhotosBtn.addEventListener('click', renderMorePhotos);
+  loadMoreVideosBtn.addEventListener('click', renderMoreVideos);
+  loadGallery();
+</script>
+
+</body>
+</html>

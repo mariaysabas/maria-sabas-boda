@@ -1,0 +1,281 @@
+:root{
+  /* ---- PALETA: cambia estos valores para cambiar todos los colores del sitio ---- */
+  --paper:#FBFAF7;
+  --ink:#1D1F1A;
+  --olive:#5C6B4F;
+  --olive-deep:#3E4A34;
+  --olive-light:#A9B79A;
+  --blush:#C98A93;
+  --line:#DEDBD1;
+  --card:#FFFFFF;
+  --shadow: 0 1px 0 rgba(29,31,26,0.05);
+
+  /* ---- TIPOGRAFÍA ----
+     Century Gothic es una fuente del sistema (no está en Google Fonts),
+     así que la definimos con alternativas por si el dispositivo no la tiene.
+     Si quieres cambiar la fuente en el futuro, solo edita esta línea. */
+  --font-main: 'Century Gothic', 'Century Gothic MT', 'Apple Gothic', 'AppleGothic', Futura, 'Questrial', sans-serif;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-main);
+  font-weight:300;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{ font-family:var(--font-main); font-weight:300; letter-spacing:0; }
+a{ color:inherit; }
+.eyebrow{
+  font-family:var(--font-main);
+  font-size:0.72rem;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  color:var(--olive);
+}
+.wrap{ max-width:960px; margin:0 auto; padding:0 24px; }
+
+/* NAV */
+nav{
+  position:sticky; top:0; z-index:50;
+  background:rgba(251,250,247,0.88);
+  backdrop-filter:blur(6px);
+  border-bottom:1px solid var(--line);
+}
+nav .wrap{
+  display:flex; align-items:center; justify-content:space-between;
+  height:60px;
+}
+nav .brand{ font-weight:300; font-size:1.05rem; display:flex; align-items:center; gap:8px; text-decoration:none; }
+nav ul{ list-style:none; display:flex; gap:22px; }
+nav a{
+  text-decoration:none; font-size:0.85rem; letter-spacing:0.02em;
+  padding:4px 2px; border-bottom:1px solid transparent;
+  transition:border-color .2s ease;
+}
+nav a:hover, nav a:focus-visible, nav a[aria-current="page"]{ border-color:var(--olive); }
+.nav-toggle{ display:none; background:none; border:none; font-size:1.4rem; cursor:pointer; color:inherit; }
+
+@media (max-width:680px){
+  nav ul{
+    display:none;
+    position:absolute; top:60px; left:0; right:0;
+    flex-direction:column; gap:0;
+    background:var(--paper); border-bottom:1px solid var(--line);
+  }
+  nav ul.open{ display:flex; }
+  nav ul li{ border-top:1px solid var(--line); }
+  nav ul a{ display:block; padding:14px 24px; }
+  .nav-toggle{ display:block; }
+}
+
+/* PAGE HEADER (used on every inner page instead of a full hero) */
+.page-header{
+  padding:72px 24px 40px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+}
+.page-header .eyebrow{ margin-bottom:14px; }
+.page-header h1{ font-size:clamp(2.4rem,6vw,3.6rem); }
+
+/* HERO (landing page only) */
+header.hero{
+  min-height:92vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  padding:80px 24px 60px;
+  position:relative;
+  /* Vuestra acuarela de fondo, con un velo claro encima para que el texto se lea bien.
+     Cambia la opacidad (0.58 / 0.72) o el color del velo aquí si quieres que se vea más o menos imagen. */
+  background-image: linear-gradient(rgba(251,250,247,0.58), rgba(251,250,247,0.72)), url('hero-bg.jpg');
+  background-size: cover;
+  background-position: center 62%;
+}
+header.hero .eyebrow{ margin-bottom:18px; }
+.names{
+  font-size:clamp(3rem, 10vw, 6.4rem);
+  line-height:0.98;
+  font-weight:300;
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:0.25em;
+}
+.names .amp{ font-weight:300; color:var(--olive); font-size:0.55em; }
+.hero-date{
+  margin-top:22px;
+  font-size:0.95rem;
+  letter-spacing:0.04em;
+  color:var(--ink);
+  opacity:0.75;
+}
+.countdown{ margin-top:46px; display:flex; gap:clamp(18px, 4vw, 42px); }
+.countdown div{ text-align:center; }
+.countdown .num{ font-size:clamp(1.8rem,5vw,2.6rem); font-weight:300; font-variant-numeric:tabular-nums; }
+.countdown .lbl{ font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--olive); margin-top:4px; }
+
+/* LANDING — menu tiles to each page */
+.menu-grid{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+  background:var(--line);
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+}
+@media (max-width:680px){ .menu-grid{ grid-template-columns:1fr 1fr; } }
+.menu-tile{
+  background:var(--paper);
+  padding:44px 20px;
+  text-align:center;
+  text-decoration:none;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  transition:background .2s ease;
+}
+.menu-tile:hover{ background:var(--card); }
+.menu-tile .tile-num{ font-size:0.7rem; letter-spacing:0.14em; color:var(--olive); }
+.menu-tile h3{ font-size:1.15rem; font-weight:400; }
+
+/* SECTION SHELL */
+section{ padding:80px 0; }
+main section + section{ border-top:1px solid var(--line); }
+section .section-head{ margin-bottom:52px; text-align:center; }
+section .section-head h2{ font-size:clamp(1.8rem,4vw,2.6rem); margin-top:8px; }
+
+/* STORY */
+.story-item{
+  display:grid; grid-template-columns:110px 1fr; gap:28px;
+  padding:26px 0; border-top:1px solid var(--line);
+  max-width:640px; margin:0 auto;
+}
+.story-item:first-of-type{ border-top:none; }
+.story-item .year{ font-size:0.85rem; color:var(--olive); padding-top:4px; }
+.story-item h3{ font-size:1.2rem; margin-bottom:6px; }
+.story-item p{ opacity:0.85; max-width:52ch; }
+
+/* DETAILS */
+.detail-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+@media (max-width:680px){ .detail-grid{ grid-template-columns:1fr; } }
+.detail-card{ background:var(--card); border:1px solid var(--line); padding:32px; box-shadow:var(--shadow); }
+.detail-card .eyebrow{ margin-bottom:10px; }
+.detail-card h3{ font-size:1.5rem; margin-bottom:14px; }
+.detail-card .row{ display:flex; justify-content:space-between; padding:8px 0; border-top:1px dashed var(--line); font-size:0.92rem; }
+.detail-card .row:first-of-type{ border-top:none; }
+.detail-card .row span:first-child{ opacity:0.6; }
+
+/* TRAVEL */
+.travel-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+@media (max-width:780px){ .travel-grid{ grid-template-columns:1fr; } }
+.travel-card h3{ font-size:1.05rem; margin-bottom:8px; }
+.travel-card p{ font-size:0.9rem; opacity:0.8; }
+
+/* GALLERY (dark page) */
+.gallery-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+@media (max-width:680px){ .gallery-grid{ grid-template-columns:repeat(2,1fr); } }
+.photo-slot{
+  aspect-ratio:1/1; background:linear-gradient(135deg, #EFEDE4, #E4E1D4);
+  border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.7rem; color:var(--olive);
+  text-align:center; padding:10px;
+}
+.gallery-photo{
+  aspect-ratio:1/1; overflow:hidden; border:1px solid rgba(255,255,255,0.14);
+  background:#2A2E24; cursor:pointer; padding:0; position:relative;
+}
+.gallery-photo img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .3s ease; }
+.gallery-photo:hover img{ transform:scale(1.04); }
+.gallery-video-tile .play-icon{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:1.4rem; background:rgba(0,0,0,0.25);
+  text-shadow:0 1px 4px rgba(0,0,0,0.6);
+}
+.gallery-section{ margin-bottom:60px; }
+.gallery-section:last-child{ margin-bottom:0; }
+.gallery-subhead{
+  font-size:1rem; font-weight:400; text-align:center;
+  margin-bottom:22px; letter-spacing:0.04em; text-transform:uppercase;
+  color:var(--olive);
+}
+body.dark-page .gallery-subhead{ color:var(--olive-light); }
+.gallery-loadmore{ display:flex; justify-content:center; margin-top:20px; }
+.gallery-toolbar{ display:flex; justify-content:center; gap:12px; margin-bottom:44px; flex-wrap:wrap; }
+.gallery-status{ text-align:center; padding:40px 20px; opacity:0.75; font-size:0.9rem; }
+.lightbox{
+  position:fixed; inset:0; background:rgba(10,11,9,0.92);
+  display:none; align-items:center; justify-content:center; z-index:100;
+  padding:32px;
+}
+.lightbox.open{ display:flex; }
+.lightbox img{ max-width:100%; max-height:100%; }
+.lightbox iframe{ width:min(90vw, 960px); height:min(80vh, 540px); border:none; background:#000; }
+.lightbox-close{
+  position:absolute; top:20px; right:24px;
+  background:none; border:none; color:var(--paper);
+  font-size:2rem; line-height:1; cursor:pointer;
+}
+
+/* TRIVIA */
+.quiz-card{
+  background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow);
+  padding:44px; max-width:640px; margin:0 auto; color:var(--ink);
+}
+.quiz-progress{ font-size:0.7rem; letter-spacing:0.1em; color:var(--olive); margin-bottom:18px; }
+.quiz-q{ font-size:1.35rem; margin-bottom:26px; font-weight:400; }
+.quiz-opts{ display:flex; flex-direction:column; gap:10px; }
+.quiz-opt{
+  text-align:left; padding:14px 18px;
+  border:1px solid var(--line); background:transparent;
+  font-family:var(--font-main); font-size:0.95rem; color:var(--ink);
+  cursor:pointer; transition:border-color .15s ease, background .15s ease;
+}
+.quiz-opt:hover{ border-color:var(--olive); }
+.quiz-opt.correct{ border-color:var(--olive); background:#EEF1E8; }
+.quiz-opt.wrong{ border-color:var(--blush); background:#F8ECEE; }
+.quiz-opt:disabled{ cursor:default; }
+.quiz-footer{ margin-top:22px; display:flex; justify-content:space-between; align-items:center; }
+.quiz-score{ font-size:0.8rem; opacity:0.7; }
+.btn{
+  font-family:var(--font-main); font-size:0.72rem;
+  letter-spacing:0.1em; text-transform:uppercase;
+  background:var(--ink); color:var(--paper);
+  border:none; padding:12px 22px; cursor:pointer;
+}
+.btn:hover{ background:var(--olive-deep); }
+.btn.ghost{ background:transparent; color:var(--ink); border:1px solid var(--ink); }
+
+/* RSVP */
+form.rsvp{ max-width:560px; margin:0 auto; display:flex; flex-direction:column; gap:18px; }
+.field{ display:flex; flex-direction:column; gap:6px; }
+.field label{ font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--olive); }
+.field input, .field select, .field textarea{
+  font-family:var(--font-main); font-size:0.98rem;
+  padding:11px 12px; border:1px solid var(--line); background:var(--card); color:var(--ink);
+}
+.field input:focus, .field select:focus, .field textarea:focus{ outline:2px solid var(--olive); outline-offset:1px; }
+.radio-row{ display:flex; gap:22px; }
+.radio-row label{ display:flex; align-items:center; gap:8px; font-size:0.95rem; text-transform:none; letter-spacing:0; color:var(--ink); }
+.rsvp-note{ font-size:0.82rem; opacity:0.65; }
+#rsvp-status{ font-size:0.9rem; padding-top:6px; }
+
+footer{ padding:56px 24px; text-align:center; }
+footer .eyebrow{ margin-bottom:6px; }
+
+/* ---- Páginas con estilo oscuro (Galería y Trivia) ----
+   Añade la clase "dark-page" al <body> de cualquier página para darle
+   este tratamiento más dramático; quítala para volver al estilo claro. */
+body.dark-page{ background:var(--ink); color:var(--paper); }
+body.dark-page nav{ background:rgba(29,31,26,0.9); border-bottom-color:rgba(255,255,255,0.12); }
+body.dark-page .eyebrow{ color:var(--olive-light); }
+body.dark-page .page-header{ border-bottom-color:rgba(255,255,255,0.12); }
+body.dark-page main section + section{ border-top-color:rgba(255,255,255,0.12); }
+body.dark-page .photo-slot{ background:linear-gradient(135deg,#2A2E24,#333829); border-color:rgba(255,255,255,0.14); color:var(--olive-light); }
+body.dark-page footer{ color:var(--paper); }
+body.dark-page .btn{ background:var(--paper); color:var(--ink); }
+body.dark-page .btn:hover{ background:#EDEAE0; }
+body.dark-page .nav-toggle{ color:var(--paper); }
+@media (max-width:680px){
+  body.dark-page nav ul{ background:var(--ink); border-bottom-color:rgba(255,255,255,0.12); }
+  body.dark-page nav ul li{ border-top-color:rgba(255,255,255,0.12); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *{ transition:none !important; }
+}
