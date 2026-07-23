@@ -328,12 +328,18 @@
 
   document.addEventListener('keydown', (e) => {
     const k = e.key.toUpperCase();
-    if (k === 'ENTER') handleKey('ENTER');
+    if (k === 'ENTER'){
+      e.preventDefault(); // evita que el Enter también "pulse" el botón que tenga el foco
+      handleKey('ENTER');
+    }
     else if (k === 'BACKSPACE') handleKey('BORRAR');
     else if (/^[A-ZÑ]$/.test(normalize(k)) && k.length === 1) handleKey(normalize(k));
   });
 
-  document.getElementById('wordle-restart').addEventListener('click', startGame);
+  document.getElementById('wordle-restart').addEventListener('click', () => {
+    startGame();
+    document.activeElement.blur(); // por si acaso, quita el foco del botón tras reiniciar
+  });
 
   startGame();
 </script>
