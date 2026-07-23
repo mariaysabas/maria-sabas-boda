@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trivia de bodas — María & Sabas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-page">
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.6">
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+        </g>
+        <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <g fill="currentColor">
+          <circle cx="24" cy="21" r="0.9"/><circle cx="27" cy="23" r="0.9"/><circle cx="26" cy="26.5" r="0.9"/>
+          <circle cx="22" cy="26.5" r="0.9"/><circle cx="21" cy="23" r="0.9"/><circle cx="24" cy="24" r="0.9"/>
+        </g>
+      </svg>
+      M &amp; S
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
+    <ul id="navlinks">
+      <li><a href="historia.html">Nuestra Historia</a></li>
+      <li><a href="detalles.html">Detalles</a></li>
+      <li><a href="viaje.html">Alojamiento</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="games.html" aria-current="page">Juegos</a></li>
+      <li><a href="confirmacion.html">Confirmación</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow"><a href="games.html" style="color:inherit;">&larr; Juegos</a> &middot; Trivia</div>
+  <h1>Trivia de bodas</h1>
+</div>
+
+<main>
+<section>
+  <div class="wrap">
+    <div class="quiz-card">
+      <div class="quiz-progress" id="quiz-progress">Pregunta 1 de 10</div>
+      <img id="quiz-img" class="trivia-img" src="" alt="" style="display:none;">
+      <div class="quiz-q" id="quiz-q"></div>
+      <div class="quiz-opts" id="quiz-opts"></div>
+      <div class="quiz-footer">
+        <div class="quiz-score" id="quiz-score">Puntos: 0</div>
+        <button class="btn ghost" id="quiz-next" style="display:none;">Siguiente pregunta</button>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-bottom:10px;">
+    <g stroke="var(--olive)" stroke-width="2" stroke-linecap="round">
+      <line x1="24" y1="4"  x2="24" y2="13"/>
+      <line x1="24" y1="35" x2="24" y2="44"/>
+      <line x1="4"  y1="24" x2="13" y2="24"/>
+      <line x1="35" y1="24" x2="44" y2="24"/>
+      <line x1="10.3" y1="10.3" x2="16.6" y2="16.6"/>
+      <line x1="31.4" y1="31.4" x2="37.7" y2="37.7"/>
+      <line x1="10.3" y1="37.7" x2="16.6" y2="31.4"/>
+      <line x1="31.4" y1="16.6" x2="37.7" y2="10.3"/>
+    </g>
+    <circle cx="24" cy="24" r="8.5" fill="none" stroke="var(--olive)" stroke-width="2"/>
+  </svg>
+  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
+  <div>24 de abril, 2027 &middot; Salamanca</div>
+</footer>
+
+<script>
+  // Cada pregunta admite un campo "img" opcional con una URL de imagen.
+  // Déjalo vacío ("") si no quieres imagen. Usa solo imágenes con licencia libre
+  // (Wikimedia Commons, vuestras propias fotos, etc.) — evita imágenes de resultados
+  // de Google normales, que casi siempre tienen derechos de autor.
+  const quiz = [
+    {
+      q: "En muchas bodas judías, ¿qué se rompe tradicionalmente al final de la ceremonia?",
+      img: "",
+      opts: ["Un plato", "Una copa de cristal", "Un espejo", "Una vela"],
+      correct: 1
+    },
+    {
+      q: "¿De qué país es tradición que la novia lleve un objeto azul, uno prestado, uno viejo y uno nuevo?",
+      img: "",
+      opts: ["Francia", "Reino Unido", "Italia", "Portugal"],
+      correct: 1
+    },
+    {
+      q: "En la tradición hindú, ¿cómo se llama el ritual en el que los novios dan siete vueltas alrededor del fuego sagrado?",
+      img: "",
+      opts: ["Saptapadi", "Mehndi", "Sangeet", "Baraat"],
+      correct: 0
+    },
+    {
+      q: "¿En qué país es tradicional que los invitados rompan platos frente a la puerta de los novios la noche antes de la boda, para dar buena suerte?",
+      img: "",
+      opts: ["Alemania", "Suecia", "Grecia", "Polonia"],
+      correct: 0
+    },
+    {
+      q: "¿Cuánto duró, aproximadamente, el matrimonio más corto registrado oficialmente (según varias fuentes de curiosidades)?",
+      img: "",
+      opts: ["3 minutos", "6 horas", "1 día", "1 semana"],
+      correct: 0
+    },
+    {
+      q: "¿Qué famosa pareja real británica se casó en la Abadía de Westminster en 2011?",
+      img: "",
+      opts: ["Harry y Meghan", "Guillermo y Kate", "Carlos y Diana", "Eduardo y Sophie"],
+      correct: 1
+    },
+    {
+      q: "¿En qué ciudad se casaron Carlos y Diana de Gales en 1981?",
+      img: "",
+      opts: ["Windsor", "Edimburgo", "Londres (Catedral de San Pablo)", "Bath"],
+      correct: 2
+    },
+    {
+      q: "¿Cuál es el color tradicional del vestido de novia en muchas bodas chinas, asociado a la buena suerte?",
+      img: "",
+      opts: ["Blanco", "Rojo", "Dorado", "Verde"],
+      correct: 1
+    },
+    {
+      q: "En las bodas tradicionales escocesas, ¿qué prenda suele llevar el novio?",
+      img: "",
+      opts: ["Un chaleco bordado", "Un kilt (falda escocesa)", "Una capa de lana", "Un sombrero de copa"],
+      correct: 1
+    },
+    {
+      q: "¿Qué actor y actriz protagonizaron una de las bodas más mediáticas de Hollywood al casarse (y divorciarse, y volverse a casar) dos veces, en los años 60 y 70?",
+      img: "",
+      opts: ["Richard Burton y Elizabeth Taylor", "Paul Newman y Joanne Woodward", "Humphrey Bogart y Lauren Bacall", "Marlon Brando y Anna Kashfi"],
+      correct: 0
+    }
+  ];
+
+  let qi = 0, score = 0;
+
+  function renderQuestion(){
+    const item = quiz[qi];
+    document.getElementById('quiz-progress').textContent = `Pregunta ${qi+1} de ${quiz.length}`;
+    document.getElementById('quiz-q').textContent = item.q;
+    document.getElementById('quiz-score').textContent = `Puntos: ${score}`;
+    document.getElementById('quiz-next').style.display = 'none';
+
+    const imgEl = document.getElementById('quiz-img');
+    if (item.img){
+      imgEl.src = item.img;
+      imgEl.alt = item.q;
+      imgEl.style.display = 'block';
+    } else {
+      imgEl.style.display = 'none';
+      imgEl.src = '';
+    }
+
+    const optsEl = document.getElementById('quiz-opts');
+    optsEl.innerHTML = '';
+    item.opts.forEach((opt, idx) => {
+      const b = document.createElement('button');
+      b.className = 'quiz-opt';
+      b.textContent = opt;
+      b.addEventListener('click', () => selectAnswer(idx));
+      optsEl.appendChild(b);
+    });
+  }
+
+  function selectAnswer(idx){
+    const item = quiz[qi];
+    const buttons = document.querySelectorAll('.quiz-opt');
+    buttons.forEach((b, i) => {
+      b.disabled = true;
+      if (i === item.correct) b.classList.add('correct');
+      else if (i === idx) b.classList.add('wrong');
+    });
+    if (idx === item.correct) score++;
+    document.getElementById('quiz-score').textContent = `Puntos: ${score}`;
+    if (qi < quiz.length - 1) {
+      document.getElementById('quiz-next').style.display = 'inline-block';
+    } else {
+      document.getElementById('quiz-progress').textContent = `¡Completado! Puntuación final: ${score} / ${quiz.length}`;
+    }
+  }
+
+  document.getElementById('quiz-next').addEventListener('click', () => {
+    qi++;
+    renderQuestion();
+  });
+
+  renderQuestion();
+</script>
+
+</body>
+</html>

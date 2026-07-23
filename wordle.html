@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wordle nupcial — María & Sabas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-page">
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.6">
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+        </g>
+        <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <g fill="currentColor">
+          <circle cx="24" cy="21" r="0.9"/><circle cx="27" cy="23" r="0.9"/><circle cx="26" cy="26.5" r="0.9"/>
+          <circle cx="22" cy="26.5" r="0.9"/><circle cx="21" cy="23" r="0.9"/><circle cx="24" cy="24" r="0.9"/>
+        </g>
+      </svg>
+      M &amp; S
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
+    <ul id="navlinks">
+      <li><a href="historia.html">Nuestra Historia</a></li>
+      <li><a href="detalles.html">Detalles</a></li>
+      <li><a href="viaje.html">Alojamiento</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="games.html" aria-current="page">Juegos</a></li>
+      <li><a href="confirmacion.html">Confirmación</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow"><a href="games.html" style="color:inherit;">&larr; Juegos</a> &middot; Palabras</div>
+  <h1>Wordle nupcial</h1>
+</div>
+
+<main>
+<section>
+  <div class="wrap" style="max-width:520px;">
+    <div class="wordle-message" id="wordle-message">Adivina la palabra de 5 letras. Escribe o toca el teclado.</div>
+    <div class="wordle-board" id="wordle-board"></div>
+    <div class="wordle-keyboard" id="wordle-keyboard"></div>
+    <div style="text-align:center; margin-top:26px;">
+      <button class="btn ghost" id="wordle-restart">Jugar otra palabra</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-bottom:10px;">
+    <g stroke="var(--olive)" stroke-width="2" stroke-linecap="round">
+      <line x1="24" y1="4"  x2="24" y2="13"/>
+      <line x1="24" y1="35" x2="24" y2="44"/>
+      <line x1="4"  y1="24" x2="13" y2="24"/>
+      <line x1="35" y1="24" x2="44" y2="24"/>
+      <line x1="10.3" y1="10.3" x2="16.6" y2="16.6"/>
+      <line x1="31.4" y1="31.4" x2="37.7" y2="37.7"/>
+      <line x1="10.3" y1="37.7" x2="16.6" y2="31.4"/>
+      <line x1="31.4" y1="16.6" x2="37.7" y2="10.3"/>
+    </g>
+    <circle cx="24" cy="24" r="8.5" fill="none" stroke="var(--olive)" stroke-width="2"/>
+  </svg>
+  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
+  <div>24 de abril, 2027 &middot; Salamanca</div>
+</footer>
+
+<script>
+  // ---- Lista de palabras (5 letras, sin tildes) ----
+  // Añade, quita o cambia palabras aquí libremente — se elige una al azar cada partida.
+  const WORDS = [
+    "NOVIA","NOVIO","BODAS","VOTOS","BAILE","TARTA","TRAJE","VIAJE","AMIGA","AMIGO",
+    "UNION","DANZA","RISAS","DULCE","CANTO","ALBUM","MAGIA","ROSAS","SUEÑO","LATIR",
+    "PASOS","VIDAS","AMADA","AMADO","BESAR","FIRME","JUNTO","FELIZ","LAZOS","FLORA",
+    "VELAS","MESAS","COPAS","VELOS","RAMOS","FOTOS","LUNAS","CARTA","DONES","ALTAR",
+    "CURAS","MADRE","PADRE","ADORO","PACTO","GOZAR","PATIO","CASAR","BRISA","NOCHE"
+  ];
+
+  const MAX_GUESSES = 6;
+  const WORD_LEN = 5;
+  const KEY_ROWS = [
+    "QWERTYUIOP".split(""),
+    "ASDFGHJKLÑ".split(""),
+    ["ENTER", ..."ZXCVBNM".split(""), "BORRAR"]
+  ];
+
+  let answer = "";
+  let currentGuess = "";
+  let guesses = [];
+  let finished = false;
+
+  function normalize(s){
+    return s.toUpperCase()
+      .replace(/Á/g,"A").replace(/É/g,"E").replace(/Í/g,"I").replace(/Ó/g,"O").replace(/Ú/g,"U");
+  }
+
+  function pickWord(){
+    // Nota: esto elige una palabra aleatoria en cada partida, tal y como pediste.
+    // Si más adelante quieres que sea "la palabra del día/semana" para todos los
+    // invitados por igual, dímelo y lo cambiamos a elegir según la fecha.
+    return WORDS[Math.floor(Math.random() * WORDS.length)];
+  }
+
+  function startGame(){
+    answer = pickWord();
+    currentGuess = "";
+    guesses = [];
+    finished = false;
+    document.getElementById('wordle-message').textContent = "Adivina la palabra de 5 letras. Escribe o toca el teclado.";
+    renderBoard();
+    renderKeyboard();
+  }
+
+  function renderBoard(){
+    const board = document.getElementById('wordle-board');
+    board.innerHTML = '';
+    for (let r = 0; r < MAX_GUESSES; r++){
+      const row = document.createElement('div');
+      row.className = 'wordle-row';
+      const guessWord = guesses[r] || (r === guesses.length ? currentGuess : '');
+      for (let c = 0; c < WORD_LEN; c++){
+        const cell = document.createElement('div');
+        cell.className = 'wordle-cell';
+        const letter = guessWord[c] || '';
+        cell.textContent = letter;
+        if (letter) cell.classList.add('filled');
+        if (guesses[r]){
+          const state = letterState(guesses[r], c);
+          cell.classList.add(state);
+        }
+        row.appendChild(cell);
+      }
+      board.appendChild(row);
+    }
+  }
+
+  function letterState(guess, idx){
+    const letter = guess[idx];
+    if (letter === answer[idx]) return 'correct';
+    if (answer.includes(letter)) return 'present';
+    return 'absent';
+  }
+
+  function keyboardLetterState(letter){
+    let best = null;
+    guesses.forEach(g => {
+      for (let i = 0; i < WORD_LEN; i++){
+        if (g[i] === letter){
+          const state = letterState(g, i);
+          if (state === 'correct') best = 'correct';
+          else if (state === 'present' && best !== 'correct') best = 'present';
+          else if (state === 'absent' && !best) best = 'absent';
+        }
+      }
+    });
+    return best;
+  }
+
+  function renderKeyboard(){
+    const kb = document.getElementById('wordle-keyboard');
+    kb.innerHTML = '';
+    KEY_ROWS.forEach(row => {
+      const rowEl = document.createElement('div');
+      rowEl.className = 'wordle-krow';
+      row.forEach(key => {
+        const btn = document.createElement('button');
+        btn.className = 'wordle-key';
+        if (key === 'ENTER' || key === 'BORRAR') btn.classList.add('wide');
+        btn.textContent = key === 'BORRAR' ? '⌫' : key;
+        const state = (key !== 'ENTER' && key !== 'BORRAR') ? keyboardLetterState(key) : null;
+        if (state) btn.classList.add(state);
+        btn.addEventListener('click', () => handleKey(key));
+        rowEl.appendChild(btn);
+      });
+      kb.appendChild(rowEl);
+    });
+  }
+
+  function handleKey(key){
+    if (finished) return;
+    if (key === 'BORRAR'){
+      currentGuess = currentGuess.slice(0, -1);
+    } else if (key === 'ENTER'){
+      submitGuess();
+    } else if (currentGuess.length < WORD_LEN) {
+      currentGuess += key;
+    }
+    renderBoard();
+  }
+
+  function submitGuess(){
+    if (currentGuess.length !== WORD_LEN){
+      showMessage('Escribe una palabra de 5 letras.');
+      return;
+    }
+    guesses.push(currentGuess);
+    const won = currentGuess === answer;
+    currentGuess = '';
+    renderBoard();
+    renderKeyboard();
+
+    if (won){
+      finished = true;
+      showMessage(`¡Enhorabuena! Acertaste en ${guesses.length} intento(s). Era "${answer}".`);
+    } else if (guesses.length >= MAX_GUESSES){
+      finished = true;
+      showMessage(`Se acabaron los intentos. La palabra era "${answer}".`);
+    } else {
+      showMessage('');
+    }
+  }
+
+  function showMessage(msg){
+    document.getElementById('wordle-message').textContent = msg;
+  }
+
+  document.addEventListener('keydown', (e) => {
+    const k = e.key.toUpperCase();
+    if (k === 'ENTER') handleKey('ENTER');
+    else if (k === 'BACKSPACE') handleKey('BORRAR');
+    else if (/^[A-ZÑ]$/.test(normalize(k)) && k.length === 1) handleKey(normalize(k));
+  });
+
+  document.getElementById('wordle-restart').addEventListener('click', startGame);
+
+  startGame();
+</script>
+
+</body>
+</html>

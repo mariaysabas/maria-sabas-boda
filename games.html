@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juegos — María & Sabas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-page">
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="1.6">
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+        </g>
+        <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+        <g fill="currentColor">
+          <circle cx="24" cy="21" r="0.9"/><circle cx="27" cy="23" r="0.9"/><circle cx="26" cy="26.5" r="0.9"/>
+          <circle cx="22" cy="26.5" r="0.9"/><circle cx="21" cy="23" r="0.9"/><circle cx="24" cy="24" r="0.9"/>
+        </g>
+      </svg>
+      M &amp; S
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
+    <ul id="navlinks">
+      <li><a href="historia.html">Nuestra Historia</a></li>
+      <li><a href="detalles.html">Detalles</a></li>
+      <li><a href="viaje.html">Alojamiento</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="games.html" aria-current="page">Juegos</a></li>
+      <li><a href="confirmacion.html">Confirmación</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="eyebrow">Solo por diversión</div>
+  <h1>Juegos</h1>
+</div>
+
+<main>
+<section>
+  <div class="wrap">
+    <div class="games-grid">
+
+      <a class="game-card" href="trivia.html">
+        <div class="game-card-tag">Trivia</div>
+        <h3>¿Cuánto nos conocéis?</h3>
+        <p>Preguntas sobre nosotros como pareja. A ver si prestabais atención.</p>
+      </a>
+
+      <a class="game-card" href="trivia-bodas.html">
+        <div class="game-card-tag">Trivia</div>
+        <h3>Trivia de bodas</h3>
+        <p>Tradiciones de boda de todo el mundo, curiosidades y alguna boda famosa. 4 opciones por pregunta.</p>
+      </a>
+
+      <a class="game-card" href="wordle.html">
+        <div class="game-card-tag">Palabras</div>
+        <h3>Wordle nupcial</h3>
+        <p>Adivina la palabra de 5 letras en 6 intentos. Todas relacionadas con nosotros y la boda.</p>
+      </a>
+
+      <div class="game-card game-card-soon">
+        <div class="game-card-tag">Próximamente</div>
+        <h3>GeoGuessr de la pareja</h3>
+        <p>Adivina dónde se tomaron nuestras fotos.</p>
+      </div>
+
+      <div class="game-card game-card-soon">
+        <div class="game-card-tag">Próximamente</div>
+        <h3>Novia a la fuga</h3>
+        <p>Un juego de habilidad, al estilo del dinosaurio de Chrome.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-bottom:10px;">
+    <g stroke="var(--olive)" stroke-width="2" stroke-linecap="round">
+      <line x1="24" y1="4"  x2="24" y2="13"/>
+      <line x1="24" y1="35" x2="24" y2="44"/>
+      <line x1="4"  y1="24" x2="13" y2="24"/>
+      <line x1="35" y1="24" x2="44" y2="24"/>
+      <line x1="10.3" y1="10.3" x2="16.6" y2="16.6"/>
+      <line x1="31.4" y1="31.4" x2="37.7" y2="37.7"/>
+      <line x1="10.3" y1="37.7" x2="16.6" y2="31.4"/>
+      <line x1="31.4" y1="16.6" x2="37.7" y2="10.3"/>
+    </g>
+    <circle cx="24" cy="24" r="8.5" fill="none" stroke="var(--olive)" stroke-width="2"/>
+  </svg>
+  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
+  <div>24 de abril, 2027 &middot; Salamanca</div>
+</footer>
+
+</body>
+</html>
