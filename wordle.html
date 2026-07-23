@@ -96,11 +96,16 @@
     "ASDFGHJKLÑ".split(""),
     ["ENTER", ..."ZXCVBNM".split(""), "BORRAR"]
   ];
+  const FLIP_DELAY_STEP = 220;   // ms entre el inicio del giro de cada celda de la fila
+  const FLIP_DURATION = 480;     // ms que dura el giro de una celda (debe coincidir con el CSS)
 
   let answer = "";
   let currentGuess = "";
-  let guesses = [];
+  let guesses = [];       // palabras ya enviadas
+  let guessStates = [];   // resultados (correct/present/absent) por palabra enviada, ya calculados
   let finished = false;
+  let animating = false;
+  let audioCtx = null;
 
   function normalize(s){
     return s.toUpperCase()
@@ -118,13 +123,63 @@
     answer = pickWord();
     currentGuess = "";
     guesses = [];
+    guessStates = [];
     finished = false;
+    animating = false;
     document.getElementById('wordle-message').textContent = "Adivina la palabra de 5 letras. Escribe o toca el teclado.";
     renderBoard();
     renderKeyboard();
   }
 
-  function renderBoard(){
+  // ---- Cálculo correcto de colores, incluyendo letras repetidas ----
+  // 1º pasada: marca los verdes (posición exacta) y "gasta" esa letra del contador.
+  // 2º pasada: para el resto, marca amarillo solo si aún quedan copias de esa letra
+  // sin asignar; si no, gris. Así, si la palabra tiene una "S" y adivinas dos,
+  // solo una se marca (verde o amarilla) y la segunda sale gris — como en el Wordle real.
+  function computeStates(guess){
+    const states = new Array(WORD_LEN).fill('absent');
+    const remaining = {};
+    for (let i = 0; i < WORD_LEN; i++){
+      const l = answer[i];
+      remaining[l] = (remaining[l] || 0) + 1;
+    }
+    for (let i = 0; i < WORD_LEN; i++){
+      if (guess[i] === answer[i]){
+        states[i] = 'correct';
+        remaining[guess[i]]--;
+      }
+    }
+    for (let i = 0; i < WORD_LEN; i++){
+      if (states[i] === 'correct') continue;
+      const l = guess[i];
+      if (remaining[l] > 0){
+        states[i] = 'present';
+        remaining[l]--;
+      } else {
+        states[i] = 'absent';
+      }
+    }
+    return states;
+  }
+
+  function keyboardLetterState(letter){
+    let best = null;
+    for (let g = 0; g < guesses.length; g++){
+      for (let i = 0; i < WORD_LEN; i++){
+        if (guesses[g][i] === letter){
+          const state = guessStates[g][i];
+          if (state === 'correct') best = 'correct';
+          else if (state === 'present' && best !== 'correct') best = 'present';
+          else if (state === 'absent' && !best) best = 'absent';
+        }
+      }
+    }
+    return best;
+  }
+
+  // rowBeingAnimated: si se pasa, esa fila se pinta sin color todavía
+  // (la animación se encarga de colorearla celda a celda).
+  function renderBoard(rowBeingAnimated){
     const board = document.getElementById('wordle-board');
     board.innerHTML = '';
     for (let r = 0; r < MAX_GUESSES; r++){
@@ -137,36 +192,13 @@
         const letter = guessWord[c] || '';
         cell.textContent = letter;
         if (letter) cell.classList.add('filled');
-        if (guesses[r]){
-          const state = letterState(guesses[r], c);
-          cell.classList.add(state);
+        if (guesses[r] && r !== rowBeingAnimated){
+          cell.classList.add(guessStates[r][c]);
         }
         row.appendChild(cell);
       }
       board.appendChild(row);
     }
-  }
-
-  function letterState(guess, idx){
-    const letter = guess[idx];
-    if (letter === answer[idx]) return 'correct';
-    if (answer.includes(letter)) return 'present';
-    return 'absent';
-  }
-
-  function keyboardLetterState(letter){
-    let best = null;
-    guesses.forEach(g => {
-      for (let i = 0; i < WORD_LEN; i++){
-        if (g[i] === letter){
-          const state = letterState(g, i);
-          if (state === 'correct') best = 'correct';
-          else if (state === 'present' && best !== 'correct') best = 'present';
-          else if (state === 'absent' && !best) best = 'absent';
-        }
-      }
-    });
-    return best;
   }
 
   function renderKeyboard(){
@@ -190,11 +222,12 @@
   }
 
   function handleKey(key){
-    if (finished) return;
+    if (finished || animating) return;
     if (key === 'BORRAR'){
       currentGuess = currentGuess.slice(0, -1);
     } else if (key === 'ENTER'){
       submitGuess();
+      return;
     } else if (currentGuess.length < WORD_LEN) {
       currentGuess += key;
     }
@@ -206,25 +239,91 @@
       showMessage('Escribe una palabra de 5 letras.');
       return;
     }
-    guesses.push(currentGuess);
-    const won = currentGuess === answer;
-    currentGuess = '';
-    renderBoard();
-    renderKeyboard();
+    const guessWord = currentGuess;
+    const rowIndex = guesses.length;
+    const states = computeStates(guessWord);
 
-    if (won){
-      finished = true;
-      showMessage(`¡Enhorabuena! Acertaste en ${guesses.length} intento(s). Era "${answer}".`);
-    } else if (guesses.length >= MAX_GUESSES){
-      finished = true;
-      showMessage(`Se acabaron los intentos. La palabra era "${answer}".`);
-    } else {
-      showMessage('');
+    guesses.push(guessWord);
+    guessStates.push(states);
+    currentGuess = '';
+    animating = true;
+    showMessage('');
+
+    // Dibuja la fila con las letras ya escritas, pero sin color todavía —
+    // el color se aplica celda a celda durante el giro.
+    renderBoard(rowIndex);
+    animateRow(rowIndex, states, () => {
+      animating = false;
+      renderKeyboard();
+      const won = guessWord === answer;
+      if (won){
+        finished = true;
+        showMessage(`¡Enhorabuena! Acertaste en ${guesses.length} intento(s). Era "${answer}".`);
+        playWinJingle();
+      } else if (guesses.length >= MAX_GUESSES){
+        finished = true;
+        showMessage(`Se acabaron los intentos. La palabra era "${answer}".`);
+      }
+    });
+  }
+
+  // ---- Animación: gira cada celda de la fila (escala horizontal a 0 y de vuelta a 1),
+  // cambiando su color justo en el punto en que está "de canto" (invisible), en cascada
+  // de izquierda a derecha. Reproduce un sonido corto en cada celda al revelarse.
+  function animateRow(rowIndex, states, onDone){
+    const board = document.getElementById('wordle-board');
+    const rowEl = board.children[rowIndex];
+    const cells = rowEl.children;
+
+    for (let c = 0; c < WORD_LEN; c++){
+      const cell = cells[c];
+      const delay = c * FLIP_DELAY_STEP;
+      setTimeout(() => {
+        cell.classList.add('flip');
+        setTimeout(() => {
+          cell.classList.add(states[c]);
+          playRevealSound(states[c]);
+        }, FLIP_DURATION / 2);
+      }, delay);
     }
+
+    const totalTime = (WORD_LEN - 1) * FLIP_DELAY_STEP + FLIP_DURATION + 60;
+    setTimeout(onDone, totalTime);
   }
 
   function showMessage(msg){
     document.getElementById('wordle-message').textContent = msg;
+  }
+
+  // ---- Sonido ----
+  // Se genera con la Web Audio API (sin archivos externos que cargar).
+  // Nota de las tres notas para el veredicto de cada celda; una fanfarria corta al ganar.
+  function getAudioCtx(){
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    return audioCtx;
+  }
+  function playTone(freq, duration = 110, type = 'sine', volume = 0.14, startDelay = 0){
+    try {
+      const ctx = getAudioCtx();
+      const start = ctx.currentTime + startDelay;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(volume, start);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration / 1000);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + duration / 1000 + 0.02);
+    } catch (e) { /* si el navegador bloquea audio, seguimos sin sonido */ }
+  }
+  function playRevealSound(state){
+    if (state === 'correct') playTone(660, 130, 'sine', 0.16);
+    else if (state === 'present') playTone(494, 110, 'sine', 0.13);
+    else playTone(300, 90, 'triangle', 0.08);
+  }
+  function playWinJingle(){
+    [523, 659, 784, 1047].forEach((freq, i) => playTone(freq, 180, 'sine', 0.15, i * 0.11));
   }
 
   document.addEventListener('keydown', (e) => {

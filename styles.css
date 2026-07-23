@@ -307,6 +307,7 @@ body.dark-page .trivia-img{ border-color:rgba(255,255,255,0.14); }
 .wordle-row{ display:flex; gap:8px; }
 .wordle-cell{
   width:52px; height:52px; border:2px solid var(--line);
+  border-radius:8px;
   display:flex; align-items:center; justify-content:center;
   font-size:1.5rem; font-weight:400; text-transform:uppercase;
   color:var(--ink); background:var(--card);
@@ -315,11 +316,17 @@ body.dark-page .trivia-img{ border-color:rgba(255,255,255,0.14); }
 .wordle-cell.correct{ background:var(--olive); border-color:var(--olive); color:#fff; }
 .wordle-cell.present{ background:#D8B24A; border-color:#D8B24A; color:#fff; }
 .wordle-cell.absent{ background:#8B8B84; border-color:#8B8B84; color:#fff; }
+.wordle-cell.flip{ animation: wordleFlip 0.48s ease; }
+@keyframes wordleFlip{
+  0%   { transform: scaleX(1); }
+  50%  { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
 .wordle-keyboard{ display:flex; flex-direction:column; gap:8px; align-items:center; }
 .wordle-krow{ display:flex; gap:6px; }
 .wordle-key{
   min-width:34px; height:44px; padding:0 8px;
-  border:none; border-radius:4px; background:var(--line);
+  border:none; border-radius:6px; background:var(--line);
   font-family:var(--font-main); font-size:0.85rem; text-transform:uppercase;
   cursor:pointer; color:var(--ink);
 }
