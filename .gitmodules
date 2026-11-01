@@ -1,0 +1,6 @@
+[submodule "bridoku"]
+	path = bridoku
+	url = https://github.com/Shemini/Bridoku.git
+[submodule "groom"]
+	path = groom
+	url = https://github.com/Shemini/GROOM.git
