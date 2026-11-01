@@ -55,9 +55,10 @@
 <section>
   <div class="wrap">
     <div class="gallery-toolbar">
-      <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeELmzHjRR6jxcF8aQDGj0THPV5Ynl_x4T7cW-JLK0Nj5GIEw/viewform" target="_blank" rel="noopener">Subir tus fotos y vídeos</a>
+      <button class="btn" id="gallery-upload">Subir tus fotos y vídeos</button>
       <button class="btn ghost" id="gallery-refresh">Actualizar</button>
     </div>
+    <div class="gallery-status" id="upload-status" style="padding:0 0 24px; min-height:1em;"></div>
 
     <div class="gallery-section">
       <h2 class="gallery-subhead">Fotos</h2>
@@ -85,7 +86,7 @@
 <div class="lightbox" id="lightbox">
   <button class="lightbox-close" id="lightbox-close" aria-label="Cerrar">&times;</button>
   <img id="lightbox-img" src="" alt="Foto de la boda ampliada" style="display:none;">
-  <iframe id="lightbox-video" src="" style="display:none;" allow="autoplay" allowfullscreen></iframe>
+  <video id="lightbox-video" style="display:none;" controls playsinline></video>
 </div>
 
 <footer>
@@ -114,27 +115,41 @@
   <div>24 de abril, 2027 &middot; Salamanca</div>
 </footer>
 
+<script src="https://upload-widget.cloudinary.com/latest/global/all.js"></script>
 <script>
-  // ---- Galería en directo desde Google Drive ----
-  // Para cambiar la carpeta o la clave, edita solo estas dos líneas:
-  const DRIVE_API_KEY = "AIzaSyAG4byz5s9mopJxosZ3Cz8Wm6s245QL6-A";
-  const DRIVE_FOLDER_ID = "1cIBrMNFRiooyJpw-B5QmIMw1GVS_dMDyWVhs_yY04bYgOW-mwnvv3qzB_Q44Gd6UELfZpk00";
-  const PAGE_SIZE = 20; // cuántas tarjetas se muestran cada vez, en fotos y en vídeos
+  // ---- Galería en directo con Cloudinary ----
+  // Solo hay que rellenar estas dos líneas con los datos de vuestra cuenta de Cloudinary.
+  // Ninguno de los dos es secreto: con ellos solo se puede SUBIR y VER, nunca borrar.
+  const CLOUD_NAME = "vwo4jbsj";           // Dashboard de Cloudinary → "Cloud name"
+  const UPLOAD_PRESET = "boda_invitados";  // nombre del upload preset sin firma (ver instrucciones)
+  const TAG = "boda";                      // etiqueta que se añade a cada archivo subido
+  const PAGE_SIZE = 20;                    // tarjetas que se muestran cada vez
 
   const photosGrid = document.getElementById('gallery-grid-photos');
   const videosGrid = document.getElementById('gallery-grid-videos');
   const loadMorePhotosBtn = document.getElementById('load-more-photos');
   const loadMoreVideosBtn = document.getElementById('load-more-videos');
   const refreshBtn = document.getElementById('gallery-refresh');
+  const uploadBtn = document.getElementById('gallery-upload');
+  const uploadStatus = document.getElementById('upload-status');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const lightboxVideo = document.getElementById('lightbox-video');
   const lightboxClose = document.getElementById('lightbox-close');
 
-  let allPhotos = [];
-  let allVideos = [];
-  let photosShown = 0;
-  let videosShown = 0;
+  const BASE = `https://res.cloudinary.com/${CLOUD_NAME}`;
+  let allPhotos = [], allVideos = [];
+  let photosShown = 0, videosShown = 0;
+
+  // Cloudinary publica una lista de todos los archivos con una etiqueta concreta.
+  // (Requiere activar "Resource list" en Settings → Security; ver instrucciones.)
+  async function fetchList(kind){
+    const res = await fetch(`${BASE}/${kind}/list/${TAG}.json?t=${Date.now()}`);
+    if (res.status === 404) return [];        // todavía no hay ningún archivo de ese tipo
+    if (!res.ok) throw new Error(`Cloudinary ${kind} list: ${res.status}`);
+    const data = await res.json();
+    return (data.resources || []).sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  }
 
   async function loadGallery(){
     photosGrid.innerHTML = '<div class="gallery-status">Cargando fotos&hellip;</div>';
@@ -142,27 +157,29 @@
     loadMorePhotosBtn.style.display = 'none';
     loadMoreVideosBtn.style.display = 'none';
 
+    if (CLOUD_NAME === "TU_CLOUD_NAME"){
+      photosGrid.innerHTML = '<div class="gallery-status">Falta configurar Cloudinary en galeria.html (CLOUD_NAME).</div>';
+      videosGrid.innerHTML = '';
+      return;
+    }
     try {
-      const url = `https://www.googleapis.com/drive/v3/files?q='${DRIVE_FOLDER_ID}'+in+parents+and+(mimeType+contains+'image/'+or+mimeType+contains+'video/')+and+trashed=false&fields=files(id,name,mimeType,thumbnailLink,createdTime)&orderBy=createdTime+desc&pageSize=1000&key=${DRIVE_API_KEY}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('Drive API error ' + res.status);
-      const data = await res.json();
-      const files = data.files || [];
-
-      allPhotos = files.filter(f => f.mimeType && f.mimeType.startsWith('image/'));
-      allVideos = files.filter(f => f.mimeType && f.mimeType.startsWith('video/'));
-      photosShown = 0;
-      videosShown = 0;
-
+      [allPhotos, allVideos] = await Promise.all([fetchList('image'), fetchList('video')]);
+      photosShown = 0; videosShown = 0;
       renderMorePhotos();
       renderMoreVideos();
     } catch (err){
       console.error(err);
-      const msg = '<div class="gallery-status">No se han podido cargar los archivos ahora mismo. Comprueba que la carpeta de Drive siga compartida como "Cualquier persona con el enlace" y que la clave de API sea correcta.</div>';
-      photosGrid.innerHTML = msg;
+      photosGrid.innerHTML = '<div class="gallery-status">No se han podido cargar los archivos ahora mismo. Inténtalo de nuevo en un rato.</div>';
       videosGrid.innerHTML = '';
     }
   }
+
+  // Miniaturas y versiones grandes generadas por Cloudinary al vuelo:
+  // recorte cuadrado inteligente, formato y calidad automáticos (también convierte HEIC de iPhone).
+  const photoThumb = r => `${BASE}/image/upload/c_fill,g_auto,w_500,h_500,f_auto,q_auto/v${r.version}/${r.public_id}`;
+  const photoLarge = r => `${BASE}/image/upload/c_limit,w_1800,h_1800,f_auto,q_auto/v${r.version}/${r.public_id}`;
+  const videoThumb = r => `${BASE}/video/upload/so_1,c_fill,w_500,h_500,q_auto/v${r.version}/${r.public_id}.jpg`;
+  const videoSrc   = r => `${BASE}/video/upload/q_auto/v${r.version}/${r.public_id}.mp4`;
 
   function renderMorePhotos(){
     if (photosShown === 0) photosGrid.innerHTML = '';
@@ -170,23 +187,20 @@
       photosGrid.innerHTML = '<div class="gallery-status">Todavía no hay fotos. ¡Sé el primero en subir una!</div>';
       return;
     }
-    const next = allPhotos.slice(photosShown, photosShown + PAGE_SIZE);
-    next.forEach(file => {
-      const smallSrc = file.thumbnailLink;
-      const bigSrc = smallSrc ? smallSrc.replace(/=s\d+$/, '=s1600') : '';
+    allPhotos.slice(photosShown, photosShown + PAGE_SIZE).forEach(r => {
       const btn = document.createElement('button');
       btn.className = 'gallery-photo';
-      btn.setAttribute('aria-label', 'Ver foto ampliada: ' + (file.name || ''));
+      btn.setAttribute('aria-label', 'Ver foto ampliada');
       const img = document.createElement('img');
       img.loading = 'lazy';
-      img.src = smallSrc;
-      img.alt = file.name || 'Foto de la boda';
+      img.src = photoThumb(r);
+      img.alt = 'Foto de la boda';
       btn.appendChild(img);
-      btn.addEventListener('click', () => openLightboxImage(bigSrc || smallSrc));
+      btn.addEventListener('click', () => openLightboxImage(photoLarge(r)));
       photosGrid.appendChild(btn);
     });
-    photosShown += next.length;
-    loadMorePhotosBtn.style.display = (photosShown < allPhotos.length) ? 'inline-block' : 'none';
+    photosShown = Math.min(photosShown + PAGE_SIZE, allPhotos.length);
+    loadMorePhotosBtn.style.display = photosShown < allPhotos.length ? 'inline-block' : 'none';
   }
 
   function renderMoreVideos(){
@@ -195,45 +209,95 @@
       videosGrid.innerHTML = '<div class="gallery-status">Todavía no hay vídeos. ¡Sé el primero en subir uno!</div>';
       return;
     }
-    const next = allVideos.slice(videosShown, videosShown + PAGE_SIZE);
-    next.forEach(file => {
+    allVideos.slice(videosShown, videosShown + PAGE_SIZE).forEach(r => {
       const btn = document.createElement('button');
       btn.className = 'gallery-photo gallery-video-tile';
-      btn.setAttribute('aria-label', 'Reproducir vídeo: ' + (file.name || ''));
+      btn.setAttribute('aria-label', 'Reproducir vídeo');
       const img = document.createElement('img');
       img.loading = 'lazy';
-      img.src = file.thumbnailLink || '';
-      img.alt = file.name || 'Vídeo de la boda';
+      img.src = videoThumb(r);
+      img.alt = 'Vídeo de la boda';
       const play = document.createElement('span');
       play.className = 'play-icon';
       play.innerHTML = '&#9658;';
       btn.appendChild(img);
       btn.appendChild(play);
-      btn.addEventListener('click', () => openLightboxVideo(file.id));
+      btn.addEventListener('click', () => openLightboxVideo(videoSrc(r)));
       videosGrid.appendChild(btn);
     });
-    videosShown += next.length;
-    loadMoreVideosBtn.style.display = (videosShown < allVideos.length) ? 'inline-block' : 'none';
+    videosShown = Math.min(videosShown + PAGE_SIZE, allVideos.length);
+    loadMoreVideosBtn.style.display = videosShown < allVideos.length ? 'inline-block' : 'none';
   }
 
+  // ---- Subida desde la propia página ----
+  // El "upload preset sin firma" solo permite AÑADIR archivos: no puede borrar ni
+  // sobrescribir nada. Borrar exige la clave secreta de la cuenta, que nunca va en la web.
+  let uploadWidget = null;
+  let uploadedCount = 0;
+  function getUploadWidget(){
+    if (uploadWidget) return uploadWidget;
+    uploadWidget = cloudinary.createUploadWidget({
+      cloudName: CLOUD_NAME,
+      uploadPreset: UPLOAD_PRESET,
+      tags: [TAG],                  // la galería muestra todo lo que lleve esta etiqueta
+      sources: ['local', 'camera'],
+      multiple: true,
+      maxFiles: 100,
+      clientAllowedFormats: ['image', 'video'],
+      maxImageFileSize: 20000000,   // 20 MB por foto
+      maxVideoFileSize: 100000000,  // 100 MB por vídeo (límite del plan gratuito)
+      language: 'es',
+      showPoweredBy: false
+    }, (error, result) => {
+      if (error){
+        console.error(error);
+        uploadStatus.textContent = 'Algo ha fallado al subir algún archivo. Prueba otra vez.';
+        return;
+      }
+      if (result.event === 'success') uploadedCount++;
+      if (result.event === 'queues-end' || result.event === 'close'){
+        if (uploadedCount > 0){
+          uploadStatus.textContent = `¡Gracias! Se han subido ${uploadedCount} archivo(s). Pueden tardar un minuto en aparecer.`;
+          uploadedCount = 0;
+          setTimeout(loadGallery, 4000);
+        }
+      }
+    });
+    return uploadWidget;
+  }
+
+  uploadBtn.addEventListener('click', () => {
+    if (CLOUD_NAME === "TU_CLOUD_NAME"){
+      uploadStatus.textContent = 'Falta configurar Cloudinary en galeria.html.';
+      return;
+    }
+    uploadStatus.textContent = '';
+    getUploadWidget().open();
+  });
+
+  // ---- Visor ampliado ----
   function openLightboxImage(src){
-    lightboxVideo.src = '';
+    lightboxVideo.pause();
+    lightboxVideo.removeAttribute('src');
     lightboxVideo.style.display = 'none';
     lightboxImg.style.display = 'block';
     lightboxImg.src = src;
     lightbox.classList.add('open');
   }
-  function openLightboxVideo(fileId){
+  function openLightboxVideo(src){
     lightboxImg.style.display = 'none';
     lightboxImg.src = '';
     lightboxVideo.style.display = 'block';
-    lightboxVideo.src = `https://drive.google.com/file/d/${fileId}/preview`;
+    lightboxVideo.src = src;
     lightbox.classList.add('open');
+    lightboxVideo.play().catch(() => {});
   }
   function closeLightbox(){
     lightbox.classList.remove('open');
     lightboxImg.src = '';
-    lightboxVideo.src = '';
+    lightboxVideo.pause();
+    lightboxVideo.removeAttribute('src');
+    lightboxVideo.load();
   }
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });

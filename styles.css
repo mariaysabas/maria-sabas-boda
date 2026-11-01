@@ -204,7 +204,7 @@ body.dark-page .gallery-subhead{ color:var(--olive-light); }
 }
 .lightbox.open{ display:flex; }
 .lightbox img{ max-width:100%; max-height:100%; }
-.lightbox iframe{ width:min(90vw, 960px); height:min(80vh, 540px); border:none; background:#000; }
+.lightbox video{ max-width:min(92vw, 1100px); max-height:85vh; background:#000; }
 .lightbox-close{
   position:absolute; top:20px; right:24px;
   background:none; border:none; color:var(--paper);
