@@ -47,43 +47,15 @@
   </div>
 </nav>
 
+
 <div class="page-header">
   <div class="eyebrow">Por favor, confirma antes del [fecha límite]</div>
   <h1>Confirmación de asistencia</h1>
 </div>
 <main>
 <section>
-  <div class="wrap">
-    <form class="rsvp" id="rsvp-form">
-      <div class="field">
-        <label for="full-name">Nombre completo</label>
-        <input id="full-name" name="full-name" type="text" required>
-      </div>
-      <div class="field">
-        <label for="email">Correo electrónico</label>
-        <input id="email" name="email" type="email" required>
-      </div>
-      <div class="field">
-        <label>¿Asistirás?</label>
-        <div class="radio-row">
-          <label><input type="radio" name="attending" value="yes" checked> Sí, allí estaré</label>
-          <label><input type="radio" name="attending" value="no"> No podré ir</label>
-        </div>
-      </div>
-      <div class="field">
-        <label for="guests">Número de personas (incluyéndote)</label>
-        <select id="guests" name="guests">
-          <option>1</option><option>2</option><option>3</option><option>4</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="dietary">Restricciones alimentarias</label>
-        <textarea id="dietary" name="dietary" rows="2"></textarea>
-      </div>
-      <button class="btn" type="submit">Enviar confirmación</button>
-      <div id="rsvp-status" class="rsvp-note"></div>
-      <div class="rsvp-note">Nota: este formulario aún no envía la información a ningún sitio — hay que conectarlo a un servicio como Formspree o Google Forms.</div>
-    </form>
+  <div class="wrap" id="rsvp-root">
+    <div class="panel"><p>Cargando&hellip;</p></div>
   </div>
 </section>
 </main>
@@ -113,11 +85,155 @@
   <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
   <div>24 de abril, 2027 &middot; Salamanca</div>
 </footer>
-<script>
-  document.getElementById('rsvp-form').addEventListener('submit', function(e){
-    e.preventDefault();
-    document.getElementById('rsvp-status').textContent = "¡Gracias! (Esto es una demo — conecta el formulario a Formspree o Google Forms para recibir las respuestas de verdad.)";
+
+<script type="module">
+import { onSession, gateMessage, loadRsvp, saveRsvp, anyErrorText, escapeHtml, formatDate } from "./auth.js";
+import { QUESTIONS, MENUS, MAX_ATTENDEES } from "./rsvp-questions.js";
+
+
+const root = document.getElementById("rsvp-root");
+
+function questionHtml(q, value) {
+  const name = "q-" + q.id;
+  const req = q.required ? "" : ' <span class="optional">(opcional)</span>';
+  const help = q.help ? `<span class="help">${escapeHtml(q.help)}</span>` : "";
+  let input = "";
+  if (q.type === "radio" || q.type === "checkbox") {
+    const vals = Array.isArray(value) ? value : [value];
+    input = `<div class="radio-col">${q.options.map(o =>
+      `<label><input type="${q.type}" name="${name}" value="${escapeHtml(o)}" ${vals.includes(o) ? "checked" : ""}> ${escapeHtml(o)}</label>`).join("")}</div>`;
+    return `<fieldset class="field" style="border:none;" data-q="${q.id}"><legend style="font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--olive); margin-bottom:6px;">${escapeHtml(q.label)}${req}</legend>${help}${input}</fieldset>`;
+  }
+  if (q.type === "textarea") input = `<textarea id="${name}" rows="3" maxlength="1000">${escapeHtml(value || "")}</textarea>`;
+  else input = `<input id="${name}" maxlength="200" value="${escapeHtml(value || "")}">`;
+  return `<div class="field" data-q="${q.id}"><label for="${name}">${escapeHtml(q.label)}${req}</label>${help}${input}</div>`;
+}
+
+function attendeeHtml(a, i) {
+  return `
+  <div class="attendee">
+    <div class="attendee-head"><span>Persona ${i + 1}</span>${i > 0 ? '<button type="button" class="link-btn remove">Quitar</button>' : ""}</div>
+    <div class="attendee-grid">
+      <div class="field"><label>Nombre y apellidos</label><input class="a-name" maxlength="80" value="${escapeHtml(a.name || "")}"></div>
+      <div class="field"><label>Menú</label><select class="a-menu">${MENUS.map(m => `<option ${a.menu === m ? "selected" : ""}>${m}</option>`).join("")}</select></div>
+    </div>
+    <div class="field"><label>Alergias o intolerancias <span class="optional">(si no hay, déjalo vacío)</span></label><input class="a-allergies" maxlength="200" value="${escapeHtml(a.allergies || "")}" placeholder="Ej.: celiaquía, frutos secos, vegetariano…"></div>
+  </div>`;
+}
+
+function readAttendees() {
+  return [...root.querySelectorAll(".attendee")].map(el => ({
+    name: el.querySelector(".a-name").value.trim(),
+    menu: el.querySelector(".a-menu").value,
+    allergies: el.querySelector(".a-allergies").value.trim()
+  }));
+}
+
+function readAnswers() {
+  const out = {};
+  QUESTIONS.forEach(q => {
+    const name = "q-" + q.id;
+    if (q.type === "radio") out[q.id] = root.querySelector(`input[name="${name}"]:checked`)?.value || "";
+    else if (q.type === "checkbox") out[q.id] = [...root.querySelectorAll(`input[name="${name}"]:checked`)].map(i => i.value);
+    else out[q.id] = document.getElementById(name).value.trim();
   });
+  return out;
+}
+
+async function renderForm(s) {
+  root.innerHTML = `<div class="panel"><p>Cargando&hellip;</p></div>`;
+  let saved = null;
+  try { saved = await loadRsvp(); } catch (e) { console.error(e); }
+
+  const attending = saved?.attending || "";
+  const attendees = saved?.attendees?.length ? saved.attendees : [{ name: s.profile.realName, menu: "Adulto", allergies: "" }];
+  const answers = saved?.answers || {};
+
+  root.innerHTML = `
+  <div class="panel">
+    ${saved ? `<p class="notice" style="margin-bottom:20px;">Ya nos enviaste tu respuesta${saved.updatedAt ? " el " + formatDate(saved.updatedAt) : ""}. Puedes cambiarla cuando quieras y volver a guardar.</p>` : ""}
+    <form class="stack" id="rsvp-form" novalidate>
+      <fieldset class="field" style="border:none;">
+        <legend style="font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--olive); margin-bottom:6px;">¿Vendréis?</legend>
+        <div class="radio-row">
+          <label><input type="radio" name="attending" value="si" ${attending === "si" ? "checked" : ""}> Sí, allí estaremos</label>
+          <label><input type="radio" name="attending" value="no" ${attending === "no" ? "checked" : ""}> No podremos ir</label>
+        </div>
+      </fieldset>
+
+      <div id="yes-part" class="stack" ${attending === "si" ? "" : "hidden"}>
+        <div class="field" style="margin-bottom:-6px;"><label>¿Quiénes venís?</label><span class="help">Una ficha por persona, incluida tú o tú mismo. Así sabremos los menús y las alergias de cada uno.</span></div>
+        <div id="attendees" class="stack">${attendees.map(attendeeHtml).join("")}</div>
+        <div><button type="button" class="btn ghost small" id="add">+ Añadir persona</button></div>
+        ${QUESTIONS.filter(q => q.id !== "comentarios").map(q => questionHtml(q, answers[q.id])).join("")}
+      </div>
+      ${QUESTIONS.filter(q => q.id === "comentarios").map(q => questionHtml(q, answers[q.id])).join("")}
+
+      <div class="row-actions">
+        <button class="btn" type="submit" id="save">${saved ? "Guardar cambios" : "Enviar confirmación"}</button>
+      </div>
+      <div class="form-msg" id="msg"></div>
+    </form>
+  </div>`;
+
+  const yesPart = document.getElementById("yes-part");
+  const list = document.getElementById("attendees");
+  const msg = document.getElementById("msg");
+  const setMsg = (t, k) => { msg.textContent = t; msg.className = "form-msg" + (k ? " " + k : ""); };
+
+  const renumber = () => {
+    [...list.children].forEach((el, i) => { el.querySelector(".attendee-head span").textContent = "Persona " + (i + 1); });
+    document.getElementById("add").hidden = list.children.length >= MAX_ATTENDEES;
+  };
+  list.addEventListener("click", e => {
+    if (e.target.classList.contains("remove")) { e.target.closest(".attendee").remove(); renumber(); }
+  });
+  document.getElementById("add").onclick = () => {
+    list.insertAdjacentHTML("beforeend", attendeeHtml({ menu: "Adulto" }, list.children.length));
+    renumber();
+    list.lastElementChild.querySelector(".a-name").focus();
+  };
+  renumber();
+
+  root.querySelectorAll('input[name="attending"]').forEach(r => r.addEventListener("change", () => {
+    yesPart.hidden = root.querySelector('input[name="attending"]:checked')?.value !== "si";
+  }));
+
+  document.getElementById("rsvp-form").onsubmit = async e => {
+    e.preventDefault();
+    const att = root.querySelector('input[name="attending"]:checked')?.value;
+    if (!att) return setMsg("Dinos si vendréis o no.", "error");
+    const allAnswers = readAnswers();
+    let people = [], answersToSave = {};
+    if (att === "si") {
+      people = readAttendees();
+      if (people.some(p => !p.name)) return setMsg("Falta el nombre de alguna persona.", "error");
+      const missing = QUESTIONS.find(q => q.required && (Array.isArray(allAnswers[q.id]) ? !allAnswers[q.id].length : !allAnswers[q.id]));
+      if (missing) return setMsg(`Falta responder: «${missing.label}».`, "error");
+      answersToSave = allAnswers;
+    } else {
+      // Si no venís, solo guardamos los comentarios.
+      QUESTIONS.filter(q => q.id === "comentarios").forEach(q => { answersToSave[q.id] = allAnswers[q.id]; });
+    }
+    const btn = document.getElementById("save");
+    btn.disabled = true;
+    try {
+      await saveRsvp({ attending: att, attendees: people, answers: answersToSave });
+      setMsg(att === "si" ? "¡Guardado! Gracias por confirmar. Puedes volver aquí y cambiarlo cuando quieras." : "Guardado. ¡Os echaremos de menos!", "ok");
+      btn.textContent = "Guardar cambios";
+    } catch (err) {
+      console.error(err);
+      setMsg(anyErrorText(err), "error");
+    } finally { btn.disabled = false; }
+  };
+}
+
+onSession(s => {
+  const gate = gateMessage(s, "confirmar tu asistencia");
+  if (gate) root.innerHTML = `<div class="panel">${gate}</div>`;
+  else renderForm(s);
+});
 </script>
+
 </body>
 </html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novedades — María & Sabas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+      M &amp; S
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
+    <ul id="navlinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="historia.html">Nuestra Historia</a></li>
+      <li><a href="detalles.html">Detalles</a></li>
+      <li><a href="viaje.html">Alojamiento</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="games.html">Juegos</a></li>
+      <li><a href="confirmacion.html">Confirmación</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="page-header">
+  <div class="eyebrow">Para nuestros invitados</div>
+  <h1>Novedades</h1>
+</div>
+<main>
+<section>
+  <div class="wrap" id="news-root">
+    <div class="panel"><p>Cargando&hellip;</p></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <svg class="sunflower-logo" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
+  <div>24 de abril, 2027 &middot; Salamanca</div>
+</footer>
+
+<script type="module">
+import { onSession, gateMessage, db, collection, getDocs, query, orderBy, escapeHtml, formatDate } from "./auth.js";
+
+const root = document.getElementById("news-root");
+
+onSession(async s => {
+  const gate = gateMessage(s, "ver las novedades de la boda");
+  if (gate) { root.innerHTML = `<div class="panel">${gate}</div>`; return; }
+  try {
+    const snap = await getDocs(query(collection(db, "news"), orderBy("createdAt", "desc")));
+    const items = snap.docs.map(d => d.data());
+    root.innerHTML = `<div class="panel">${items.length
+      ? items.map(n => `<article class="news-item"><div class="date">${formatDate(n.createdAt)}</div><h3>${escapeHtml(n.title)}</h3><div class="body">${escapeHtml(n.body)}</div></article>`).join("")
+      : "<p>Todavía no hay novedades. Os avisaremos por aquí de cualquier cambio de horarios, transporte o detalles de última hora.</p>"}</div>`;
+  } catch (e) {
+    console.error(e);
+    root.innerHTML = `<div class="panel"><p class="form-msg error">No se pudieron cargar las novedades. Recarga la página en un momento.</p></div>`;
+  }
+});
+</script>
+
+</body>
+</html>

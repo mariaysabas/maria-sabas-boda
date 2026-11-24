@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Administración — María & Sabas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+      M &amp; S
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
+    <ul id="navlinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="historia.html">Nuestra Historia</a></li>
+      <li><a href="detalles.html">Detalles</a></li>
+      <li><a href="viaje.html">Alojamiento</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="games.html">Juegos</a></li>
+      <li><a href="confirmacion.html">Confirmación</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="page-header">
+  <div class="eyebrow">Solo para María y Sabas</div>
+  <h1>Administración</h1>
+</div>
+<main>
+<section>
+  <div class="wrap" id="admin-root" style="max-width:1100px;">
+    <div class="panel"><p>Cargando&hellip;</p></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <svg class="sunflower-logo" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
+  <div>24 de abril, 2027 &middot; Salamanca</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script type="module">
+import {
+  configured, onSession, db, doc, updateDoc, deleteDoc, collection, collectionGroup, getDocs,
+  addDoc, query, orderBy, serverTimestamp, escapeHtml, formatDate, anyErrorText
+} from "./auth.js";
+import { QUESTIONS } from "./rsvp-questions.js";
+
+const root = document.getElementById("admin-root");
+const STATUS_LABEL = { approved: "Aprobada", pending: "Pendiente", rejected: "Sin acceso" };
+const GAME_NAMES = { "trivia-pareja": "¿Cuánto nos conocéis?", "trivia-bodas": "Trivia de bodas", "wordle": "Wordle nupcial" };
+
+let users = [], rsvps = [], scores = [], news = [];
+
+async function loadAll() {
+  const [u, r, sc, n] = await Promise.all([
+    getDocs(collection(db, "users")),
+    getDocs(collection(db, "rsvp")),
+    getDocs(collectionGroup(db, "scores")),
+    getDocs(query(collection(db, "news"), orderBy("createdAt", "desc")))
+  ]);
+  users = u.docs.map(d => ({ uid: d.id, ...d.data() }));
+  rsvps = r.docs.map(d => ({ uid: d.id, ...d.data() }));
+  scores = sc.docs.map(d => ({ uid: d.ref.parent.parent.id, game: d.id, ...d.data() }));
+  news = n.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+const toDate = ts => ts?.toDate ? ts.toDate() : null;
+const answerText = v => Array.isArray(v) ? v.join(", ") : (v ?? "");
+// Columnas de preguntas: las del formulario en su orden, más cualquier respuesta antigua
+// a una pregunta que ya no esté en la lista.
+function allQuestionIds() {
+  const ids = QUESTIONS.map(q => q.id);
+  rsvps.forEach(r => Object.keys(r.answers || {}).forEach(k => { if (!ids.includes(k)) ids.push(k); }));
+  return ids;
+}
+const qLabel = id => QUESTIONS.find(q => q.id === id)?.label || id;
+
+// ---------- resumen de confirmaciones ----------
+function summaryHtml() {
+  const yes = rsvps.filter(r => r.attending === "si");
+  const no = rsvps.filter(r => r.attending === "no");
+  const people = yes.flatMap(r => r.attendees || []);
+  const kids = people.filter(p => p.menu === "Infantil").length;
+  const allergies = yes.flatMap(r => (r.attendees || []).filter(p => p.allergies).map(p => ({ who: p.name, what: p.allergies })));
+  const transport = {};
+  yes.forEach(r => {
+    const t = answerText(r.answers?.transporte) || "Sin responder";
+    transport[t] = (transport[t] || 0) + (r.attendees || []).length;
+  });
+  const approvedNoAnswer = users.filter(u => u.status === "approved" && !rsvps.some(r => r.uid === u.uid));
+
+  return `
+  <div class="stats">
+    <div class="stat"><div class="n">${people.length}</div><div class="l">Personas vienen</div></div>
+    <div class="stat"><div class="n">${people.length - kids} / ${kids}</div><div class="l">Adultos / niños</div></div>
+    <div class="stat"><div class="n">${yes.length}</div><div class="l">Respuestas «sí»</div></div>
+    <div class="stat"><div class="n">${no.length}</div><div class="l">Respuestas «no»</div></div>
+    <div class="stat"><div class="n">${approvedNoAnswer.length}</div><div class="l">Aprobados sin responder</div></div>
+  </div>
+  <h3>Transporte (personas)</h3>
+  ${Object.keys(transport).length ? `<ul style="padding-left:18px;">${Object.entries(transport).map(([k, v]) => `<li>${escapeHtml(k)}: <strong>${v}</strong></li>`).join("")}</ul>` : "<p>Todavía no hay respuestas.</p>"}
+  <h3>Alergias e intolerancias</h3>
+  ${allergies.length ? `<ul style="padding-left:18px;">${allergies.map(a => `<li><strong>${escapeHtml(a.who)}</strong>: ${escapeHtml(a.what)}</li>`).join("")}</ul>` : "<p>Ninguna por ahora.</p>"}
+  ${approvedNoAnswer.length ? `<h3>Aprobados que aún no han respondido</h3><p>${approvedNoAnswer.map(u => escapeHtml(u.realName)).join(", ")}</p>` : ""}`;
+}
+
+// ---------- exportar a Excel ----------
+function exportExcel() {
+  const qids = allQuestionIds();
+  const userByUid = Object.fromEntries(users.map(u => [u.uid, u]));
+
+  const attendeeRows = [];
+  rsvps.forEach(r => {
+    const base = { "Respuesta de": r.realName, "Email": r.email, "¿Viene?": r.attending === "si" ? "Sí" : "No" };
+    const extra = Object.fromEntries(qids.map(q => [qLabel(q), answerText(r.answers?.[q])]));
+    const when = { "Actualizado": toDate(r.updatedAt) };
+    if (r.attending === "si" && (r.attendees || []).length) {
+      r.attendees.forEach(p => attendeeRows.push({ ...base, "Asistente": p.name, "Menú": p.menu, "Alergias": p.allergies, ...extra, ...when }));
+    } else {
+      attendeeRows.push({ ...base, "Asistente": "", "Menú": "", "Alergias": "", ...extra, ...when });
+    }
+  });
+
+  const groupRows = rsvps.map(r => ({
+    "Respuesta de": r.realName, "Usuario": r.username, "Email": r.email,
+    "¿Viene?": r.attending === "si" ? "Sí" : "No",
+    "Nº personas": r.attending === "si" ? (r.attendees || []).length : 0,
+    "Asistentes": (r.attendees || []).map(p => p.name).join(", "),
+    ...Object.fromEntries(qids.map(q => [qLabel(q), answerText(r.answers?.[q])])),
+    "Actualizado": toDate(r.updatedAt)
+  }));
+
+  const userRows = users.map(u => ({
+    "Nombre": u.realName, "Usuario": u.username, "Email": u.email,
+    "Estado": STATUS_LABEL[u.status] || u.status, "Registrado": toDate(u.createdAt),
+    "Ha confirmado": rsvps.some(r => r.uid === u.uid) ? "Sí" : "No"
+  }));
+
+  const scoreRows = scores.map(s => ({
+    "Juego": GAME_NAMES[s.game] || s.game, "Usuario": s.username, "Nombre": userByUid[s.uid]?.realName || "",
+    "Partidas": s.plays, "Mejor": s.best, "Puntos totales": s.total, "Victorias": s.wins, "Última partida": toDate(s.lastPlayed)
+  })).sort((a, b) => a.Juego.localeCompare(b.Juego) || b["Puntos totales"] - a["Puntos totales"]);
+
+  const wb = XLSX.utils.book_new();
+  const add = (rows, name) => {
+    const ws = XLSX.utils.json_to_sheet(rows.length ? rows : [{ "(sin datos)": "" }], { cellDates: true, dateNF: "dd/mm/yyyy hh:mm" });
+    const cols = Object.keys(rows[0] || { x: 1 });
+    ws["!cols"] = cols.map(c => ({ wch: Math.min(40, Math.max(c.length, ...rows.map(r => String(r[c] instanceof Date ? "dd/mm/yyyy hh:mm" : (r[c] ?? "")).length)) + 2) }));
+    XLSX.utils.book_append_sheet(wb, ws, name);
+  };
+  add(attendeeRows, "Asistentes");
+  add(groupRows, "Respuestas");
+  add(userRows, "Invitados");
+  add(scoreRows, "Puntuaciones");
+  const stamp = new Date().toISOString().slice(0, 10);
+  XLSX.writeFile(wb, `boda-maria-sabas-${stamp}.xlsx`);
+}
+
+// ---------- página ----------
+function usersTable(list, actions) {
+  if (!list.length) return "<p>Nadie por aquí.</p>";
+  return `<div class="table-scroll"><table class="data-table"><thead><tr><th>Nombre</th><th>Usuario</th><th>Email</th><th>Registro</th><th></th></tr></thead><tbody>
+    ${list.map(u => `<tr data-uid="${u.uid}"><td>${escapeHtml(u.realName)}</td><td>${escapeHtml(u.username)}</td><td>${escapeHtml(u.email)}</td><td>${formatDate(u.createdAt)}</td>
+      <td><div class="row-actions">${actions.map(a => `<button class="btn small ${a.cls || ""}" data-act="${a.status}">${a.label}</button>`).join("")}</div></td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+
+function render() {
+  const pending = users.filter(u => u.status === "pending");
+  const approved = users.filter(u => u.status === "approved");
+  const rejected = users.filter(u => u.status === "rejected");
+
+  root.innerHTML = `
+  <div class="panel wide">
+    <h2>Pendientes de aprobar <span class="badge pending">${pending.length}</span></h2>
+    <p class="lead">Personas que se han registrado sin código de invitación (o con uno incorrecto).</p>
+    ${usersTable(pending, [{ status: "approved", label: "Aprobar" }, { status: "rejected", label: "Rechazar", cls: "danger" }])}
+  </div>
+
+  <div class="panel wide">
+    <h2>Confirmaciones</h2>
+    <div id="summary">${summaryHtml()}</div>
+    <div class="row-actions" style="margin-top:22px;">
+      <button class="btn" id="export">Descargar Excel</button>
+      <button class="btn ghost" id="reload">Actualizar datos</button>
+    </div>
+    <p class="lead" style="margin-top:10px;">El Excel incluye una hoja por persona (para el catering), otra por respuesta, la lista de invitados registrados y las puntuaciones de los juegos. Se puede abrir también en Google Sheets.</p>
+  </div>
+
+  <div class="panel wide">
+    <h2>Novedades</h2>
+    <p class="lead">Lo que publiquéis aquí aparece en la página «Novedades», visible solo para invitados aprobados.</p>
+    <form class="stack" id="news-form" novalidate>
+      <div class="field"><label for="news-title">Título</label><input id="news-title" maxlength="120"></div>
+      <div class="field"><label for="news-body">Texto</label><textarea id="news-body" rows="5" maxlength="5000"></textarea></div>
+      <div class="row-actions"><button class="btn" type="submit" id="news-btn">Publicar</button></div>
+      <div class="form-msg" id="news-msg"></div>
+    </form>
+    <div style="margin-top:26px;">
+      ${news.length ? news.map(n => `<div class="news-item"><div class="date">${formatDate(n.createdAt)}</div><h3>${escapeHtml(n.title)}</h3><div class="body">${escapeHtml(n.body)}</div>
+        <p style="margin-top:10px;"><button class="link-btn" data-del-news="${n.id}">Borrar</button></p></div>`).join("") : "<p>Aún no habéis publicado nada.</p>"}
+    </div>
+  </div>
+
+  <div class="panel wide">
+    <h2>Emails de invitados aprobados <span class="badge approved">${approved.length}</span></h2>
+    <p class="lead">Para avisar por email: copia la lista y pégala en el campo <strong>CCO</strong> (copia oculta) de Gmail, para que nadie vea los correos de los demás.</p>
+    <div class="row-actions"><button class="btn ghost" id="copy-emails">Copiar emails</button><span class="form-msg" id="copy-msg"></span></div>
+  </div>
+
+  <div class="panel wide">
+    <h2>Invitados aprobados</h2>
+    ${usersTable(approved, [{ status: "rejected", label: "Quitar acceso", cls: "danger" }])}
+    <h3>Sin acceso</h3>
+    ${usersTable(rejected, [{ status: "approved", label: "Aprobar" }])}
+  </div>`;
+
+  document.getElementById("export").onclick = exportExcel;
+  document.getElementById("reload").onclick = start;
+
+  root.querySelectorAll("[data-act]").forEach(btn => btn.onclick = async () => {
+    const uid = btn.closest("tr").dataset.uid;
+    btn.disabled = true;
+    try {
+      await updateDoc(doc(db, "users", uid), { status: btn.dataset.act });
+      users.find(u => u.uid === uid).status = btn.dataset.act;
+      render();
+    } catch (e) { alert(anyErrorText(e)); btn.disabled = false; }
+  });
+
+  document.getElementById("news-form").onsubmit = async e => {
+    e.preventDefault();
+    const title = document.getElementById("news-title").value.trim();
+    const body = document.getElementById("news-body").value.trim();
+    const msg = document.getElementById("news-msg");
+    if (!title || !body) { msg.textContent = "Escribe un título y un texto."; msg.className = "form-msg error"; return; }
+    const btn = document.getElementById("news-btn");
+    btn.disabled = true;
+    try {
+      await addDoc(collection(db, "news"), { title, body, createdAt: serverTimestamp() });
+      await start();
+    } catch (err) { msg.textContent = anyErrorText(err); msg.className = "form-msg error"; btn.disabled = false; }
+  };
+  root.querySelectorAll("[data-del-news]").forEach(b => b.onclick = async () => {
+    if (!confirm("¿Borrar esta novedad?")) return;
+    try { await deleteDoc(doc(db, "news", b.dataset.delNews)); await start(); } catch (e) { alert(anyErrorText(e)); }
+  });
+
+  document.getElementById("copy-emails").onclick = async () => {
+    const list = approved.map(u => u.email).filter(Boolean).join(", ");
+    const msg = document.getElementById("copy-msg");
+    try { await navigator.clipboard.writeText(list); msg.textContent = `Copiados ${approved.length} emails.`; msg.className = "form-msg ok"; }
+    catch (e) { prompt("Copia esta lista:", list); }
+  };
+}
+
+async function start() {
+  try { await loadAll(); render(); }
+  catch (e) {
+    console.error(e);
+    root.innerHTML = `<div class="panel"><p class="form-msg error">No se pudieron cargar los datos. ${escapeHtml(anyErrorText(e))}</p></div>`;
+  }
+}
+
+let started = false;
+onSession(s => {
+  if (!configured) { root.innerHTML = `<div class="panel"><p>El inicio de sesión todavía no está activado en la web.</p></div>`; return; }
+  if (!s.user) { root.innerHTML = `<div class="panel"><p>Inicia sesión con una cuenta de administrador.</p><p><a class="btn" href="cuenta.html">Iniciar sesión</a></p></div>`; return; }
+  if (!s.isAdmin) { root.innerHTML = `<div class="panel"><p>Esta página es solo para los novios.</p></div>`; return; }
+  if (!started) { started = true; start(); }
+});
+</script>
+
+</body>
+</html>

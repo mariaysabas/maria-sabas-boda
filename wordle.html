@@ -260,9 +260,12 @@
         finished = true;
         showMessage(`¡Enhorabuena! Acertaste en ${guesses.length} intento(s). Era "${answer}".`);
         playWinJingle();
+        // Guarda la partida en la cuenta (si hay sesión): menos intentos, más puntos.
+        if (window.weddingScores) window.weddingScores.save('wordle', (MAX_GUESSES + 1 - guesses.length) * 10, true);
       } else if (guesses.length >= MAX_GUESSES){
         finished = true;
         showMessage(`Se acabaron los intentos. La palabra era "${answer}".`);
+        if (window.weddingScores) window.weddingScores.save('wordle', 0, false);
       }
     });
   }
@@ -344,5 +347,6 @@
   startGame();
 </script>
 
+<script type="module" src="auth.js"></script>
 </body>
 </html>

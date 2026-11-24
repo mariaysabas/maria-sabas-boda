@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi cuenta — María & Sabas</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+      M &amp; S
+    </a>
+    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
+    <ul id="navlinks">
+      <li><a href="index.html">Inicio</a></li>
+      <li><a href="historia.html">Nuestra Historia</a></li>
+      <li><a href="detalles.html">Detalles</a></li>
+      <li><a href="viaje.html">Alojamiento</a></li>
+      <li><a href="galeria.html">Galería</a></li>
+      <li><a href="games.html">Juegos</a></li>
+      <li><a href="confirmacion.html">Confirmación</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="page-header">
+  <div class="eyebrow">Solo para invitados</div>
+  <h1>Mi cuenta</h1>
+</div>
+<main>
+<section>
+  <div class="wrap" id="account-root">
+    <div class="panel"><p>Cargando&hellip;</p></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <svg class="sunflower-logo" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <g stroke="currentColor" stroke-width="1.6">
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
+    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
+  </g>
+  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  <g fill="currentColor">
+    <circle cx="24" cy="21" r="0.9"/>
+    <circle cx="27" cy="23" r="0.9"/>
+    <circle cx="26" cy="26.5" r="0.9"/>
+    <circle cx="22" cy="26.5" r="0.9"/>
+    <circle cx="21" cy="23" r="0.9"/>
+    <circle cx="24" cy="24" r="0.9"/>
+  </g>
+</svg>
+  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
+  <div>24 de abril, 2027 &middot; Salamanca</div>
+</footer>
+
+<script type="module">
+import {
+  configured, onSession, getSession, refreshSession, signInGoogle, signUpEmail, signInEmail,
+  resendVerification, resetPassword, logout, createProfile, redeemInviteCode, updateRealName,
+  changeUsername, deleteAccount, loadMyScores, anyErrorText, errorText, escapeHtml, auth
+} from "./auth.js";
+
+// Nombres que se muestran para cada juego en la tabla de puntuaciones.
+const GAME_NAMES = {
+  "trivia-pareja": "¿Cuánto nos conocéis?",
+  "trivia-bodas": "Trivia de bodas",
+  "wordle": "Wordle nupcial"
+};
+
+const root = document.getElementById("account-root");
+const GOOGLE_ICON = '<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
+
+function setMsg(el, text, kind) { el.textContent = text || ""; el.className = "form-msg" + (kind ? " " + kind : ""); }
+async function busy(btn, fn) {
+  btn.disabled = true;
+  try { await fn(); } finally { btn.disabled = false; }
+}
+
+// ---------- 1. sin sesión ----------
+function renderSignedOut() {
+  root.innerHTML = `
+  <div class="panel">
+    <h2>Entra o crea tu cuenta</h2>
+    <p class="lead">Con una cuenta puedes confirmar tu asistencia, ver las novedades de la boda y guardar tus puntuaciones en los juegos. Es voluntario: el resto de la web se puede ver sin cuenta.</p>
+    <button class="google-btn" id="google">${GOOGLE_ICON}<span>Continuar con Google</span></button>
+    <div class="form-msg" id="google-msg"></div>
+    <div class="divider">o con tu email</div>
+    <div class="tabs" role="tablist">
+      <button role="tab" id="tab-in" aria-selected="true">Entrar</button>
+      <button role="tab" id="tab-up" aria-selected="false">Crear cuenta</button>
+    </div>
+    <form class="stack" id="email-form" novalidate>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="email" required>
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input id="password" type="password" autocomplete="current-password" minlength="6" required>
+      </div>
+      <div class="notice" id="pw-notice" hidden>Usa una contraseña nueva que no uses en ningún otro sitio. Esto es solo para los juegos y avisos de la boda, no un sistema de alta seguridad. Te enviaremos un email para confirmar tu dirección.</div>
+      <div class="row-actions">
+        <button class="btn" type="submit" id="email-submit">Entrar</button>
+        <button class="link-btn" type="button" id="forgot">¿Has olvidado la contraseña?</button>
+      </div>
+      <div class="form-msg" id="email-msg"></div>
+    </form>
+  </div>`;
+
+  let mode = "in";
+  const $ = id => document.getElementById(id);
+  const setMode = m => {
+    mode = m;
+    $("tab-in").setAttribute("aria-selected", m === "in");
+    $("tab-up").setAttribute("aria-selected", m === "up");
+    $("pw-notice").hidden = m !== "up";
+    $("forgot").hidden = m !== "in";
+    $("email-submit").textContent = m === "in" ? "Entrar" : "Crear cuenta";
+    $("password").autocomplete = m === "in" ? "current-password" : "new-password";
+    setMsg($("email-msg"), "");
+  };
+  $("tab-in").onclick = () => setMode("in");
+  $("tab-up").onclick = () => setMode("up");
+
+  $("google").onclick = () => busy($("google"), async () => {
+    setMsg($("google-msg"), "");
+    try { await signInGoogle(); }
+    catch (e) { setMsg($("google-msg"), errorText(e), "error"); }
+  });
+
+  $("email-form").onsubmit = e => {
+    e.preventDefault();
+    const email = $("email").value.trim(), pw = $("password").value;
+    if (!email || !pw) return setMsg($("email-msg"), "Escribe tu email y una contraseña.", "error");
+    busy($("email-submit"), async () => {
+      try {
+        if (mode === "in") await signInEmail(email, pw);
+        else await signUpEmail(email, pw);
+      } catch (err) { setMsg($("email-msg"), errorText(err), "error"); }
+    });
+  };
+
+  $("forgot").onclick = () => {
+    const email = $("email").value.trim();
+    if (!email) return setMsg($("email-msg"), "Escribe tu email arriba y vuelve a pulsar aquí.", "error");
+    busy($("forgot"), async () => {
+      try { await resetPassword(email); setMsg($("email-msg"), "Si hay una cuenta con ese email, te hemos enviado un enlace para cambiar la contraseña.", "ok"); }
+      catch (err) { setMsg($("email-msg"), errorText(err), "error"); }
+    });
+  };
+}
+
+// ---------- 2. email sin verificar ----------
+function renderVerify(s) {
+  root.innerHTML = `
+  <div class="panel">
+    <h2>Confirma tu email</h2>
+    <p class="lead">Te hemos enviado un enlace a <strong>${escapeHtml(s.user.email)}</strong>. Ábrelo y después vuelve aquí y pulsa el botón. Si no lo encuentras, mira en la carpeta de spam.</p>
+    <div class="row-actions">
+      <button class="btn" id="verified">Ya lo he confirmado</button>
+      <button class="btn ghost" id="resend">Reenviar email</button>
+      <button class="link-btn" id="out">Cerrar sesión</button>
+    </div>
+    <p class="form-msg" id="msg" style="margin-top:14px;"></p>
+  </div>`;
+  const msg = () => document.getElementById("msg"); // la pantalla se repinta al refrescar la sesión
+  document.getElementById("verified").onclick = e => busy(e.currentTarget, async () => {
+    await refreshSession();
+    if (getSession().needsVerification) setMsg(msg(), "Todavía no nos consta. Asegúrate de abrir el enlace del email y vuelve a probar.", "error");
+  });
+  document.getElementById("resend").onclick = e => busy(e.currentTarget, async () => {
+    try { await resendVerification(); setMsg(msg(), "Te lo hemos vuelto a enviar.", "ok"); }
+    catch (err) { setMsg(msg(), errorText(err), "error"); }
+  });
+  document.getElementById("out").onclick = () => logout();
+}
+
+// ---------- 3. falta el perfil ----------
+function renderProfileForm(s) {
+  root.innerHTML = `
+  <div class="panel">
+    <h2>Completa tu perfil</h2>
+    <p class="lead">Un último paso para saber quién eres.</p>
+    <form class="stack" id="profile-form" novalidate>
+      <div class="field">
+        <label for="username">Nombre de usuario</label>
+        <input id="username" maxlength="20" autocomplete="nickname" required>
+        <span class="help">Es el que verán los demás en las clasificaciones de los juegos. Entre 3 y 20 caracteres, sin espacios.</span>
+      </div>
+      <div class="field">
+        <label for="realname">Nombre y apellidos</label>
+        <input id="realname" maxlength="80" autocomplete="name" value="${escapeHtml(s.user.displayName || "")}" required>
+        <span class="help">Solo lo vemos nosotros, para saber quién eres (y a quién dar los premios).</span>
+      </div>
+      <div class="field">
+        <label for="code">Código de invitación <span class="optional">(opcional)</span></label>
+        <input id="code" maxlength="40" autocomplete="off">
+        <span class="help">Viene en vuestra invitación. Con él tu cuenta queda activada al momento; sin él, tendrás que esperar a que la aprobemos.</span>
+      </div>
+      <div class="notice">Solo guardamos tu email, tu nombre, tu nombre de usuario, tus respuestas al formulario de confirmación y tus puntuaciones, y solo para la boda. Puedes borrar tu cuenta y todos tus datos cuando quieras desde esta página.</div>
+      <div class="row-actions">
+        <button class="btn" type="submit" id="save">Guardar perfil</button>
+        <button class="link-btn" type="button" id="out">Cerrar sesión</button>
+      </div>
+      <div class="form-msg" id="msg"></div>
+    </form>
+  </div>`;
+  const $ = id => document.getElementById(id);
+  $("out").onclick = () => logout();
+  $("profile-form").onsubmit = e => {
+    e.preventDefault();
+    busy($("save"), async () => {
+      try {
+        const r = await createProfile({ username: $("username").value, realName: $("realname").value, inviteCode: $("code").value });
+        // El perfil ya se ha pintado al guardarse; se repinta para mostrar el aviso del código.
+        if (r.codeRejected) { sessionStorage.setItem("codeRejected", "1"); render(getSession()); }
+      } catch (err) { setMsg($("msg"), anyErrorText(err), "error"); }
+    });
+  };
+}
+
+// ---------- 4. con perfil ----------
+const STATUS = {
+  approved: ["approved", "Aprobada", "Tu cuenta está activa: puedes confirmar asistencia, ver las novedades y tus puntuaciones se guardan."],
+  pending: ["pending", "Pendiente", "Tu cuenta está pendiente de aprobación. Mientras tanto puedes jugar, pero las puntuaciones no se guardan. Si tienes el código de la invitación, introdúcelo aquí para activarla ya."],
+  rejected: ["rejected", "Sin acceso", "Esta cuenta no tiene acceso a la zona de invitados. Si crees que es un error, escríbenos."]
+};
+
+async function renderProfile(s) {
+  const p = s.profile;
+  const [cls, label, text] = STATUS[p.status] || STATUS.pending;
+  const viaGoogle = (s.user.providerData || []).some(x => x.providerId === "google.com");
+  const codeRejected = sessionStorage.getItem("codeRejected");
+  sessionStorage.removeItem("codeRejected");
+
+  root.innerHTML = `
+  <div class="panel">
+    <h2>Hola, ${escapeHtml(p.username)}</h2>
+    <p style="margin:10px 0 6px;"><span class="badge ${cls}">${label}</span></p>
+    <p class="lead">${text}</p>
+    ${codeRejected ? '<p class="form-msg error" style="margin-bottom:14px;">El código de invitación no era correcto, así que la cuenta ha quedado pendiente. Puedes volver a intentarlo aquí.</p>' : ""}
+    ${p.status === "pending" ? `
+    <form class="row-actions" id="code-form" style="margin-bottom:20px;" novalidate>
+      <div class="field" style="flex:1; min-width:180px;"><label for="code">Código de invitación</label><input id="code" maxlength="40" autocomplete="off"></div>
+      <button class="btn" type="submit" id="code-btn" style="align-self:flex-end;">Activar</button>
+    </form>
+    <p class="form-msg" id="code-msg"></p>` : ""}
+    ${s.approved ? `<div class="row-actions" style="margin-bottom:22px;"><a class="btn" href="confirmacion.html">Confirmar asistencia</a><a class="btn ghost" href="novedades.html">Novedades</a></div>` : ""}
+    ${s.isAdmin ? `<p style="margin-bottom:22px;"><a class="btn ghost" href="admin.html">Panel de administración</a></p>` : ""}
+    <dl class="kv">
+      <dt>Nombre</dt><dd>${escapeHtml(p.realName)}</dd>
+      <dt>Usuario</dt><dd>${escapeHtml(p.username)}</dd>
+      <dt>Email</dt><dd>${escapeHtml(s.user.email || "")}</dd>
+      <dt>Entras con</dt><dd>${viaGoogle ? "Google" : "Email y contraseña"}</dd>
+    </dl>
+
+    <h3>Cambiar datos</h3>
+    <form class="row-actions" id="user-form" novalidate>
+      <div class="field" style="flex:1; min-width:180px;"><label for="new-username">Nombre de usuario</label><input id="new-username" maxlength="20" value="${escapeHtml(p.username)}"></div>
+      <button class="btn ghost small" type="submit" id="user-btn" style="align-self:flex-end;">Guardar</button>
+    </form>
+    <form class="row-actions" id="name-form" style="margin-top:12px;" novalidate>
+      <div class="field" style="flex:1; min-width:180px;"><label for="new-name">Nombre y apellidos</label><input id="new-name" maxlength="80" value="${escapeHtml(p.realName)}"></div>
+      <button class="btn ghost small" type="submit" id="name-btn" style="align-self:flex-end;">Guardar</button>
+    </form>
+    <p class="form-msg" id="edit-msg" style="margin-top:10px;"></p>
+    ${viaGoogle ? "" : `<p style="margin-top:6px;"><button class="link-btn" id="pw-reset">Cambiar contraseña</button></p>`}
+  </div>
+
+  <div class="panel">
+    <h2>Mis puntuaciones</h2>
+    <div id="scores"><p class="lead">Cargando&hellip;</p></div>
+  </div>
+
+  <div class="panel">
+    <div class="row-actions">
+      <button class="btn ghost" id="out">Cerrar sesión</button>
+      <button class="btn danger" id="delete">Eliminar mi cuenta</button>
+    </div>
+    <p class="form-msg" id="danger-msg" style="margin-top:12px;"></p>
+  </div>`;
+
+  const $ = id => document.getElementById(id);
+  const editMsg = $("edit-msg");
+
+  if ($("code-form")) $("code-form").onsubmit = e => {
+    e.preventDefault();
+    const code = $("code").value.trim();
+    if (!code) return setMsg($("code-msg"), "Escribe el código.", "error");
+    busy($("code-btn"), async () => {
+      try { await redeemInviteCode(code); }
+      catch (err) { setMsg($("code-msg"), "Ese código no es correcto. Revisa la invitación.", "error"); }
+    });
+  };
+  $("user-form").onsubmit = e => {
+    e.preventDefault();
+    busy($("user-btn"), async () => {
+      try { await changeUsername($("new-username").value); }
+      catch (err) { setMsg(editMsg, anyErrorText(err), "error"); }
+    });
+  };
+  $("name-form").onsubmit = e => {
+    e.preventDefault();
+    busy($("name-btn"), async () => {
+      try { await updateRealName($("new-name").value); }
+      catch (err) { setMsg(editMsg, anyErrorText(err), "error"); }
+    });
+  };
+  if ($("pw-reset")) $("pw-reset").onclick = e => busy(e.currentTarget, async () => {
+    try { await resetPassword(s.user.email); setMsg(editMsg, "Te hemos enviado un email con un enlace para cambiar la contraseña.", "ok"); }
+    catch (err) { setMsg(editMsg, errorText(err), "error"); }
+  });
+  $("out").onclick = () => logout();
+  $("delete").onclick = e => {
+    if (!confirm("¿Seguro? Se borrarán tu cuenta, tu confirmación de asistencia y tus puntuaciones. No se puede deshacer.")) return;
+    busy(e.currentTarget, async () => {
+      try { await deleteAccount(); }
+      catch (err) {
+        if (err?.code === "auth/requires-recent-login")
+          setMsg($("danger-msg"), "Tus datos se han borrado. Para terminar de eliminar la cuenta, cierra sesión, vuelve a entrar y pulsa otra vez «Eliminar mi cuenta».", "error");
+        else setMsg($("danger-msg"), anyErrorText(err), "error");
+      }
+    });
+  };
+
+  // Puntuaciones
+  try {
+    const scores = await loadMyScores();
+    const ids = Object.keys(scores);
+    $("scores").innerHTML = ids.length === 0
+      ? `<p class="lead">${s.approved ? "Todavía no has jugado con la sesión iniciada. ¡Prueba los <a href=\"games.html\">juegos</a>!" : "Las puntuaciones se guardarán cuando tu cuenta esté aprobada."}</p>`
+      : `<div class="table-scroll"><table class="score-table">
+          <thead><tr><th>Juego</th><th>Partidas</th><th>Mejor</th><th>Puntos totales</th></tr></thead>
+          <tbody>${ids.map(id => {
+            const d = scores[id];
+            return `<tr><td>${escapeHtml(GAME_NAMES[id] || id)}</td><td>${d.plays}</td><td>${d.best}</td><td>${d.total}</td></tr>`;
+          }).join("")}</tbody></table></div>`;
+  } catch (err) {
+    $("scores").innerHTML = `<p class="form-msg error">No se pudieron cargar las puntuaciones.</p>`;
+  }
+}
+
+function render(s) {
+  if (!configured) {
+    root.innerHTML = `<div class="panel"><p>El inicio de sesión todavía no está activado en la web.</p></div>`;
+  } else if (!s.user) renderSignedOut();
+  else if (s.needsVerification) renderVerify(s);
+  else if (s.needsProfile) renderProfileForm(s);
+  else if (s.profile) renderProfile(s);
+  else root.innerHTML = `<div class="panel"><p class="form-msg error">No se pudo cargar tu perfil. Recarga la página en un momento.</p></div>`;
+}
+onSession(render);
+</script>
+
+</body>
+</html>

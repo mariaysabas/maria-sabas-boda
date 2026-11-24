@@ -134,6 +134,8 @@
       document.getElementById('quiz-next').style.display = 'inline-block';
     } else {
       document.getElementById('quiz-progress').textContent = `¡Completado! Puntuación final: ${score} / ${quiz.length}`;
+      // Guarda la partida en la cuenta (si hay sesión): 100 puntos repartidos entre las preguntas.
+      if (window.weddingScores) window.weddingScores.save('trivia-pareja', Math.round(score / quiz.length * 100), score === quiz.length);
     }
   }
 
@@ -144,5 +146,6 @@
 
   renderQuestion();
 </script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>
