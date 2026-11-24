@@ -297,7 +297,9 @@ export async function loadMyScores() {
 // game: id del juego ("wordle", "trivia-pareja"...) · points: puntos de esta partida · won: si ganó
 export async function saveScore(game, points, won) {
   if (!configured || !state.approved) return { saved: false, reason: state.user ? "pending" : "anon" };
-  points = Math.max(0, Math.min(100, Math.round(points)));
+  // Los juegos de la web puntúan de 0 a 100 por partida; GROOM usa su propia escala (miles de puntos).
+  const max = game === "groom" ? 100000000 : 100;
+  points = Math.max(0, Math.min(max, Math.round(points)));
   const ref = doc(db, "users", auth.currentUser.uid, "scores", game);
   await runTransaction(db, async tx => {
     const snap = await tx.get(ref);
@@ -335,6 +337,15 @@ export function toast(html, isHtml) {
     el.className = "site-toast";
     el.setAttribute("role", "status");
     document.body.appendChild(el);
+    if (!document.getElementById("site-toast-style")) {
+      const st = document.createElement("style");
+      st.id = "site-toast-style";
+      st.textContent = `.site-toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+        background:#1D1F1A;color:#FBFAF7;padding:12px 18px;font:15px 'Century Gothic','Apple Gothic',Futura,sans-serif;
+        z-index:2147483000;max-width:calc(100vw - 32px);transition:opacity .25s ease,transform .25s ease}
+        .site-toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}.site-toast a{color:inherit}`;
+      document.head.appendChild(st);
+    }
   }
   if (isHtml) el.innerHTML = html; else el.textContent = html;
   el.classList.add("show");
