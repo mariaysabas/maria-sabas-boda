@@ -186,7 +186,7 @@ async function usernameTaken(lower) {
 // crea igualmente pero queda pendiente de que la aprobéis.
 export async function createProfile({ username, realName, inviteCode }) {
   const user = auth.currentUser;
-  username = username.trim(); realName = realName.trim(); inviteCode = (inviteCode || "").trim();
+  username = username.trim(); realName = realName.trim(); inviteCode = (inviteCode || "").trim().toUpperCase();
   if (!validUsername(username)) throw { code: "app/username-invalid" };
   if (realName.length < 2) throw { code: "app/realname-invalid" };
   const lower = username.toLowerCase();
@@ -216,7 +216,7 @@ export async function createProfile({ username, realName, inviteCode }) {
 // Para quien se registró sin código (o con uno mal escrito) y lo introduce después.
 export async function redeemInviteCode(code) {
   const uid = auth.currentUser.uid;
-  await updateDoc(doc(db, "users", uid), { status: "approved", inviteCode: code.trim() });
+  await updateDoc(doc(db, "users", uid), { status: "approved", inviteCode: code.trim().toUpperCase() });
   await loadSession(auth.currentUser);
 }
 
