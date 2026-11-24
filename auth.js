@@ -41,7 +41,7 @@ export { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, collectionGroup,
 try {
   const raw = location.search.slice(1);
   let c = new URLSearchParams(location.search).get("codigo");
-  if (!c && /^[A-Za-z0-9_-]{3,40}$/.test(raw)) c = raw;
+  if (!c && /^[A-Za-z0-9_-]{2,40}$/.test(raw)) c = raw;
   if (c) localStorage.setItem("inviteCode", c.trim().toUpperCase());
 } catch (e) { /* sin almacenamiento: habrá que escribirlo a mano */ }
 export function savedInviteCode() {
