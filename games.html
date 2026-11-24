@@ -3,120 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Juegos — María & Sabas</title>
+<title>Juegos — María &amp; Sabas</title>
+<link rel="icon" href="assets/monograma.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body class="dark-page">
+<body>
 
-<nav>
-  <div class="wrap">
-    <a class="brand" href="index.html">
-      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <g stroke="currentColor" stroke-width="1.6">
-          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
-          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
-          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
-          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
-          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
-          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
-          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
-          <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
-        </g>
-        <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
-        <g fill="currentColor">
-          <circle cx="24" cy="21" r="0.9"/><circle cx="27" cy="23" r="0.9"/><circle cx="26" cy="26.5" r="0.9"/>
-          <circle cx="22" cy="26.5" r="0.9"/><circle cx="21" cy="23" r="0.9"/><circle cx="24" cy="24" r="0.9"/>
-        </g>
-      </svg>
-      M &amp; S
-    </a>
-    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
-    <ul id="navlinks">
-      <li><a href="historia.html">Nuestra Historia</a></li>
-      <li><a href="detalles.html">Detalles</a></li>
-      <li><a href="viaje.html">Alojamiento</a></li>
-      <li><a href="galeria.html">Galería</a></li>
-      <li><a href="games.html" aria-current="page">Juegos</a></li>
-      <li><a href="confirmacion.html">Confirmación</a></li>
-    </ul>
-  </div>
+<!-- Menú de escritorio -->
+<nav class="nav-wide" aria-label="Menú principal">
+  <a href="index.html">Inicio</a>
+  <a href="historia.html">Nuestra Historia</a>
+  <a href="detalles.html">Detalles</a>
+  <a href="viaje.html">Alojamiento</a>
+  <a href="galeria.html">Galería</a>
+  <a href="games.html" aria-current="page">Juegos</a>
+  <a href="confirmacion.html">Confirmación</a>
 </nav>
 
-<div class="page-header">
-  <div class="eyebrow">Solo por diversión</div>
-  <h1>Juegos</h1>
-</div>
+<!-- Menú móvil -->
+<header class="nav-narrow">
+  <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navlinks">
+    <svg class="icono-abrir" aria-hidden="true" width="26" height="22" viewBox="0 0 26 22" fill="none"><path d="M2 4 C 8 2, 16 5, 24 3" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M2 11 C 9 9, 16 12, 24 10" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M2 18 C 8 16, 17 19, 24 17" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/></svg>
+    <svg class="icono-cerrar" aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 3 C 8 8, 14 14, 19 19" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M19 3 C 14 8, 8 14, 3 19" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/></svg>
+  </button>
+  <nav class="nav-panel" id="navlinks" aria-label="Menú">
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Nuestra Historia</a>
+    <a href="detalles.html">Detalles</a>
+    <a href="viaje.html">Alojamiento</a>
+    <a href="galeria.html">Galería</a>
+    <a href="games.html" aria-current="page">Juegos</a>
+    <a href="confirmacion.html">Confirmación</a>
+  </nav>
+</header>
 
-<main>
-<section>
-  <div class="wrap">
-    <div class="games-grid">
-
-      <a class="game-card" href="trivia.html">
-        <div class="game-card-tag">Trivia</div>
-        <h3>¿Cuánto nos conocéis?</h3>
-        <p>Preguntas sobre nosotros como pareja. A ver si prestabais atención.</p>
-      </a>
-
-      <a class="game-card" href="trivia-bodas.html">
-        <div class="game-card-tag">Trivia</div>
-        <h3>Trivia de bodas</h3>
-        <p>Tradiciones de boda de todo el mundo, curiosidades y alguna boda famosa. 4 opciones por pregunta.</p>
-      </a>
-
-      <a class="game-card" href="wordle.html">
-        <div class="game-card-tag">Palabras</div>
-        <h3>Wordle nupcial</h3>
-        <p>Adivina la palabra de 5 letras en 6 intentos. Todas relacionadas con nosotros y la boda.</p>
-      </a>
-
-      <a class="game-card" href="bridoku/">
-        <div class="game-card-tag">Lógica</div>
-        <h3>Bridoku</h3>
-        <p>Sabas aparece muerto en plena boda. Coloca a los invitados en el plano y descubre quién estuvo a solas con él. Casos nuevos cada día.</p>
-      </a>
-
-      <a class="game-card" href="groom/">
-        <div class="game-card-tag">Acción</div>
-        <h3>GROOM</h3>
-        <p>Sobrevive a oleadas de invitados zombi en la Catedral de Salamanca. Mejor en ordenador, con teclado y ratón.</p>
-      </a>
-
-      <div class="game-card game-card-soon">
-        <div class="game-card-tag">Próximamente</div>
-        <h3>GeoGuessr de la pareja</h3>
-        <p>Adivina dónde se tomaron nuestras fotos.</p>
-      </div>
-
-      <div class="game-card game-card-soon">
-        <div class="game-card-tag">Próximamente</div>
-        <h3>Novia a la fuga</h3>
-        <p>Un juego de habilidad, al estilo del dinosaurio de Chrome.</p>
-      </div>
-
+<main class="pagina">
+  <h1 class="titulo-pagina">JUEGOS</h1>
+  <div class="rejilla">
+    <a class="tarjeta juego" href="trivia.html">
+      <span class="etiqueta">TRIVIA</span>
+      <h2>¿Cuánto nos conocéis?</h2>
+      <p>Preguntas sobre nosotros como pareja. A ver si prestabais atención.</p>
+    </a>
+    <a class="tarjeta juego" href="trivia-bodas.html">
+      <span class="etiqueta">TRIVIA</span>
+      <h2>Trivia de bodas</h2>
+      <p>Tradiciones de boda de todo el mundo, curiosidades y alguna boda famosa. 4 opciones por pregunta.</p>
+    </a>
+    <a class="tarjeta juego" href="wordle.html">
+      <span class="etiqueta">PALABRAS</span>
+      <h2>Wordle nupcial</h2>
+      <p>Adivina la palabra de 5 letras en 6 intentos. Todas relacionadas con nosotros y la boda.</p>
+    </a>
+    <a class="tarjeta juego" href="bridoku/">
+      <span class="etiqueta">LÓGICA</span>
+      <h2>Bridoku</h2>
+      <p>Sabas aparece muerto en plena boda. Coloca a los invitados en el plano y descubre quién estuvo a solas con él. Casos nuevos cada día.</p>
+    </a>
+    <a class="tarjeta juego" href="groom/">
+      <span class="etiqueta">ACCIÓN</span>
+      <h2>GROOM</h2>
+      <p>Sobrevive a oleadas de invitados zombi en la Catedral de Salamanca. Mejor en ordenador, con teclado y ratón.</p>
+    </a>
+    <div class="tarjeta juego tarjeta--pronto">
+      <span class="etiqueta">PRÓXIMAMENTE</span>
+      <h2>GeoGuessr de la pareja</h2>
+      <p>Adivina dónde se tomaron nuestras fotos.</p>
+    </div>
+    <div class="tarjeta juego tarjeta--pronto">
+      <span class="etiqueta">PRÓXIMAMENTE</span>
+      <h2>Novia a la fuga</h2>
+      <p>Un juego de habilidad, al estilo del dinosaurio de Chrome.</p>
     </div>
   </div>
-</section>
 </main>
 
-<footer>
-  <svg width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="margin-bottom:10px;">
-    <g stroke="var(--olive)" stroke-width="2" stroke-linecap="round">
-      <line x1="24" y1="4"  x2="24" y2="13"/>
-      <line x1="24" y1="35" x2="24" y2="44"/>
-      <line x1="4"  y1="24" x2="13" y2="24"/>
-      <line x1="35" y1="24" x2="44" y2="24"/>
-      <line x1="10.3" y1="10.3" x2="16.6" y2="16.6"/>
-      <line x1="31.4" y1="31.4" x2="37.7" y2="37.7"/>
-      <line x1="10.3" y1="37.7" x2="16.6" y2="31.4"/>
-      <line x1="31.4" y1="16.6" x2="37.7" y2="10.3"/>
-    </g>
-    <circle cx="24" cy="24" r="8.5" fill="none" stroke="var(--olive)" stroke-width="2"/>
-  </svg>
-  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
-  <div>24 de abril, 2027 &middot; Salamanca</div>
-</footer>
 
+<script src="menu.js"></script>
 <script type="module" src="auth.js"></script>
 </body>
 </html>

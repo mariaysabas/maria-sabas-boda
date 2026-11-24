@@ -3,117 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>María & Sabas</title>
+<title>María &amp; Sabas</title>
+<link rel="icon" href="assets/monograma.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a class="brand" href="index.html">
-      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <g stroke="currentColor" stroke-width="1.6">
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
-  </g>
-  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
-  <g fill="currentColor">
-    <circle cx="24" cy="21" r="0.9"/>
-    <circle cx="27" cy="23" r="0.9"/>
-    <circle cx="26" cy="26.5" r="0.9"/>
-    <circle cx="22" cy="26.5" r="0.9"/>
-    <circle cx="21" cy="23" r="0.9"/>
-    <circle cx="24" cy="24" r="0.9"/>
-  </g>
-</svg>
-      M &amp; S
-    </a>
-    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
-    <ul id="navlinks">
-      <li><a href="index.html" aria-current="page">Inicio</a></li>
-      <li><a href="historia.html">Nuestra Historia</a></li>
-      <li><a href="detalles.html">Detalles</a></li>
-      <li><a href="viaje.html">Alojamiento</a></li>
-      <li><a href="galeria.html">Galería</a></li>
-      <li><a href="games.html">Juegos</a></li>
-      <li><a href="confirmacion.html">Confirmación</a></li>
-    </ul>
-  </div>
+<!-- Menú de escritorio -->
+<nav class="nav-wide" aria-label="Menú principal">
+  <a href="index.html" aria-current="page">Inicio</a>
+  <a href="historia.html">Nuestra Historia</a>
+  <a href="detalles.html">Detalles</a>
+  <a href="viaje.html">Alojamiento</a>
+  <a href="galeria.html">Galería</a>
+  <a href="games.html">Juegos</a>
+  <a href="confirmacion.html">Confirmación</a>
 </nav>
 
-<header class="hero">
-  <div class="eyebrow">Nos casamos</div>
-  <h1 class="names">María <span class="amp">&amp;</span> Sabas</h1>
-  <div class="hero-date">24 de abril, 2027 &middot; Salamanca</div>
-  <div class="countdown" id="countdown">
-    <div><div class="num" id="cd-days">00</div><div class="lbl">Días</div></div>
-    <div><div class="num" id="cd-hours">00</div><div class="lbl">Horas</div></div>
-    <div><div class="num" id="cd-mins">00</div><div class="lbl">Min</div></div>
-    <div><div class="num" id="cd-secs">00</div><div class="lbl">Seg</div></div>
-  </div>
+<!-- Menú móvil -->
+<header class="nav-narrow">
+  <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navlinks">
+    <svg class="icono-abrir" aria-hidden="true" width="26" height="22" viewBox="0 0 26 22" fill="none"><path d="M2 4 C 8 2, 16 5, 24 3" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M2 11 C 9 9, 16 12, 24 10" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M2 18 C 8 16, 17 19, 24 17" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/></svg>
+    <svg class="icono-cerrar" aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 3 C 8 8, 14 14, 19 19" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M19 3 C 14 8, 8 14, 3 19" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/></svg>
+  </button>
+  <nav class="nav-panel" id="navlinks" aria-label="Menú">
+    <a href="index.html" aria-current="page">Inicio</a>
+    <a href="historia.html">Nuestra Historia</a>
+    <a href="detalles.html">Detalles</a>
+    <a href="viaje.html">Alojamiento</a>
+    <a href="galeria.html">Galería</a>
+    <a href="games.html">Juegos</a>
+    <a href="confirmacion.html">Confirmación</a>
+  </nav>
 </header>
 
-<main>
-<div class="menu-grid">
-  <a class="menu-tile" href="historia.html"><div class="tile-num">01</div><h3>Nuestra Historia</h3></a>
-  <a class="menu-tile" href="detalles.html"><div class="tile-num">02</div><h3>Detalles</h3></a>
-  <a class="menu-tile" href="viaje.html"><div class="tile-num">03</div><h3>Alojamiento</h3></a>
-  <a class="menu-tile" href="galeria.html"><div class="tile-num">04</div><h3>Galería</h3></a>
-  <a class="menu-tile" href="games.html"><div class="tile-num">05</div><h3>Juegos</h3></a>
-  <a class="menu-tile" href="confirmacion.html"><div class="tile-num">06</div><h3>Confirmación</h3></a>
-</div>
+<main class="portada">
+  <h1 style="margin:0;"><img src="assets/titulo.webp" alt="María &amp; Sabas" class="portada__titulo" width="1057" height="562"></h1>
+  <div>
+    <p class="portada__casamos">¡NOS CASAMOS!</p>
+    <p class="portada__fecha">24 de abril de 2027</p>
+  </div>
+  <div class="cuenta" role="timer" aria-label="Cuenta atrás hasta la boda">
+    <div><strong id="cd-days">0</strong><span>DÍAS</span></div>
+    <div><strong id="cd-hours">00</strong><span>HORAS</span></div>
+    <div><strong id="cd-mins">00</strong><span><span class="largo">MINUTOS</span><span class="corto">MIN</span></span></div>
+    <div><strong id="cd-secs">00</strong><span><span class="largo">SEGUNDOS</span><span class="corto">SEG</span></span></div>
+  </div>
+  <a class="btn" href="confirmacion.html">Confirmar asistencia</a>
 </main>
 
-<footer>
-  <svg class="sunflower-logo" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <g stroke="currentColor" stroke-width="1.6">
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
-  </g>
-  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
-  <g fill="currentColor">
-    <circle cx="24" cy="21" r="0.9"/>
-    <circle cx="27" cy="23" r="0.9"/>
-    <circle cx="26" cy="26.5" r="0.9"/>
-    <circle cx="22" cy="26.5" r="0.9"/>
-    <circle cx="21" cy="23" r="0.9"/>
-    <circle cx="24" cy="24" r="0.9"/>
-  </g>
-</svg>
-  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
-  <div>24 de abril, 2027 &middot; Salamanca</div>
-</footer>
 <script>
-  // 24 de abril de 2027, 13:00 (hora de la ceremonia)
-  const weddingDate = new Date("2027-04-24T13:00:00");
+  // Cuenta atrás hasta el 24 de abril de 2027 a las 13:00, hora de Madrid (en abril, UTC+2).
+  const weddingDate = new Date("2027-04-24T13:00:00+02:00");
+  const two = n => String(n).padStart(2, "0");
   function updateCountdown(){
-    const now = new Date();
-    let diff = weddingDate - now;
-    if (diff < 0) diff = 0;
-    const days = Math.floor(diff / (1000*60*60*24));
-    const hours = Math.floor((diff / (1000*60*60)) % 24);
-    const mins = Math.floor((diff / (1000*60)) % 60);
-    const secs = Math.floor((diff / 1000) % 60);
-    document.getElementById('cd-days').textContent = String(days).padStart(2,'0');
-    document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
-    document.getElementById('cd-mins').textContent = String(mins).padStart(2,'0');
-    document.getElementById('cd-secs').textContent = String(secs).padStart(2,'0');
+    const diff = Math.max(0, weddingDate - new Date());
+    document.getElementById("cd-days").textContent = Math.floor(diff / 86400000);
+    document.getElementById("cd-hours").textContent = two(Math.floor(diff / 3600000) % 24);
+    document.getElementById("cd-mins").textContent = two(Math.floor(diff / 60000) % 60);
+    document.getElementById("cd-secs").textContent = two(Math.floor(diff / 1000) % 60);
   }
   updateCountdown();
   setInterval(updateCountdown, 1000);
 </script>
+
+<script src="menu.js"></script>
 <script type="module" src="auth.js"></script>
 </body>
 </html>

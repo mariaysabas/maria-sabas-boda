@@ -101,32 +101,35 @@ export async function refreshSession() {
 }
 
 // ---------- menú: "Iniciar sesión" / usuario y "Novedades" ----------
+// Se añaden a los dos menús: el de escritorio (.nav-wide) y el panel del móvil (#navlinks).
 function renderNav() {
-  const ul = document.getElementById("navlinks");
-  if (!ul || !configured) return;
+  if (!configured) return;
   const here = location.pathname.split("/").pop() || "index.html";
+  const menus = [document.querySelector(".nav-wide"), document.getElementById("navlinks")].filter(Boolean);
+  menus.forEach(menu => {
+    let news = menu.querySelector('[data-nav="news"]');
+    if (state.approved) {
+      if (!news) {
+        news = document.createElement("a");
+        news.href = "novedades.html";
+        news.dataset.nav = "news";
+        news.textContent = "Novedades";
+      }
+      menu.appendChild(news);
+      if (here === "novedades.html") news.setAttribute("aria-current", "page");
+    } else if (news) news.remove();
 
-  let news = document.getElementById("nav-news");
-  if (state.approved) {
-    if (!news) {
-      news = document.createElement("li");
-      news.id = "nav-news";
-      news.innerHTML = '<a href="novedades.html">Novedades</a>';
-      ul.appendChild(news);
+    let acc = menu.querySelector('[data-nav="account"]');
+    if (!acc) {
+      acc = document.createElement("a");
+      acc.href = "cuenta.html";
+      acc.dataset.nav = "account";
+      acc.className = "nav-cuenta";
     }
-    if (here === "novedades.html") news.querySelector("a").setAttribute("aria-current", "page");
-  } else if (news) news.remove();
-
-  let acc = document.getElementById("nav-account");
-  if (!acc) {
-    acc = document.createElement("li");
-    acc.id = "nav-account";
-    acc.innerHTML = '<a href="cuenta.html" class="nav-account-link"></a>';
-    ul.appendChild(acc);
-  } else ul.appendChild(acc); // siempre el último
-  const a = acc.querySelector("a");
-  a.textContent = state.profile?.username || (state.user ? "Mi cuenta" : "Iniciar sesión");
-  if (here === "cuenta.html") a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    menu.appendChild(acc); // siempre el último
+    acc.textContent = state.profile?.username || (state.user ? "Mi cuenta" : "Iniciar sesión");
+    if (here === "cuenta.html") acc.setAttribute("aria-current", "page"); else acc.removeAttribute("aria-current");
+  });
 }
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", renderNav); else renderNav();
 
@@ -337,7 +340,8 @@ export function toast(html, isHtml) {
     el.className = "site-toast";
     el.setAttribute("role", "status");
     document.body.appendChild(el);
-    if (!document.getElementById("site-toast-style")) {
+    // Estilo propio solo donde no está la hoja de la web (dentro de GROOM, por ejemplo).
+    if (!document.getElementById("site-toast-style") && !document.querySelector('link[href$="styles.css"]')) {
       const st = document.createElement("style");
       st.id = "site-toast-style";
       st.textContent = `.site-toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;

@@ -3,88 +3,50 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Confirmación — María & Sabas</title>
+<title>Confirmación — María &amp; Sabas</title>
+<link rel="icon" href="assets/monograma.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a class="brand" href="index.html">
-      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <g stroke="currentColor" stroke-width="1.6">
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
-  </g>
-  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
-  <g fill="currentColor">
-    <circle cx="24" cy="21" r="0.9"/>
-    <circle cx="27" cy="23" r="0.9"/>
-    <circle cx="26" cy="26.5" r="0.9"/>
-    <circle cx="22" cy="26.5" r="0.9"/>
-    <circle cx="21" cy="23" r="0.9"/>
-    <circle cx="24" cy="24" r="0.9"/>
-  </g>
-</svg>
-      M &amp; S
-    </a>
-    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
-    <ul id="navlinks">
-      <li><a href="index.html">Inicio</a></li>
-      <li><a href="historia.html">Nuestra Historia</a></li>
-      <li><a href="detalles.html">Detalles</a></li>
-      <li><a href="viaje.html">Alojamiento</a></li>
-      <li><a href="galeria.html">Galería</a></li>
-      <li><a href="games.html">Juegos</a></li>
-      <li><a href="confirmacion.html" aria-current="page">Confirmación</a></li>
-    </ul>
-  </div>
+<!-- Menú de escritorio -->
+<nav class="nav-wide" aria-label="Menú principal">
+  <a href="index.html">Inicio</a>
+  <a href="historia.html">Nuestra Historia</a>
+  <a href="detalles.html">Detalles</a>
+  <a href="viaje.html">Alojamiento</a>
+  <a href="galeria.html">Galería</a>
+  <a href="games.html">Juegos</a>
+  <a href="confirmacion.html" aria-current="page">Confirmación</a>
 </nav>
 
+<!-- Menú móvil -->
+<header class="nav-narrow">
+  <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navlinks">
+    <svg class="icono-abrir" aria-hidden="true" width="26" height="22" viewBox="0 0 26 22" fill="none"><path d="M2 4 C 8 2, 16 5, 24 3" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M2 11 C 9 9, 16 12, 24 10" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M2 18 C 8 16, 17 19, 24 17" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/></svg>
+    <svg class="icono-cerrar" aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 3 C 8 8, 14 14, 19 19" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M19 3 C 14 8, 8 14, 3 19" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/></svg>
+  </button>
+  <nav class="nav-panel" id="navlinks" aria-label="Menú">
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Nuestra Historia</a>
+    <a href="detalles.html">Detalles</a>
+    <a href="viaje.html">Alojamiento</a>
+    <a href="galeria.html">Galería</a>
+    <a href="games.html">Juegos</a>
+    <a href="confirmacion.html" aria-current="page">Confirmación</a>
+  </nav>
+</header>
 
-<div class="page-header">
-  <div class="eyebrow">Por favor, confirma antes del [fecha límite]</div>
-  <h1>Confirmación de asistencia</h1>
-</div>
-<main>
-<section>
-  <div class="wrap" id="rsvp-root">
-    <div class="panel"><p>Cargando&hellip;</p></div>
-  </div>
-</section>
+<main class="pagina pagina--formulario">
+  <header class="cabecera">
+    <h1 class="titulo-pagina titulo-pagina--largo">CONFIRMACIÓN DE ASISTENCIA</h1>
+    <p class="cabecera__nota">Por favor, confirma antes del [fecha límite]</p>
+  </header>
+  <div class="pila" id="rsvp-root"><div class="tarjeta"><p>Cargando&hellip;</p></div></div>
 </main>
-
-<footer>
-  <svg class="sunflower-logo" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <g stroke="currentColor" stroke-width="1.6">
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
-  </g>
-  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
-  <g fill="currentColor">
-    <circle cx="24" cy="21" r="0.9"/>
-    <circle cx="27" cy="23" r="0.9"/>
-    <circle cx="26" cy="26.5" r="0.9"/>
-    <circle cx="22" cy="26.5" r="0.9"/>
-    <circle cx="21" cy="23" r="0.9"/>
-    <circle cx="24" cy="24" r="0.9"/>
-  </g>
-</svg>
-  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
-  <div>24 de abril, 2027 &middot; Salamanca</div>
-</footer>
 
 <script type="module">
 import { onSession, gateMessage, loadRsvp, saveRsvp, anyErrorText, escapeHtml, formatDate } from "./auth.js";
@@ -95,29 +57,27 @@ const root = document.getElementById("rsvp-root");
 
 function questionHtml(q, value) {
   const name = "q-" + q.id;
-  const req = q.required ? "" : ' <span class="optional">(opcional)</span>';
-  const help = q.help ? `<span class="help">${escapeHtml(q.help)}</span>` : "";
-  let input = "";
+  const opt = q.required ? "" : ' <span class="opcional">(opcional)</span>';
+  const help = q.help ? `<p class="ayuda">${escapeHtml(q.help)}</p>` : "";
   if (q.type === "radio" || q.type === "checkbox") {
     const vals = Array.isArray(value) ? value : [value];
-    input = `<div class="radio-col">${q.options.map(o =>
-      `<label><input type="${q.type}" name="${name}" value="${escapeHtml(o)}" ${vals.includes(o) ? "checked" : ""}> ${escapeHtml(o)}</label>`).join("")}</div>`;
-    return `<fieldset class="field" style="border:none;" data-q="${q.id}"><legend style="font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--olive); margin-bottom:6px;">${escapeHtml(q.label)}${req}</legend>${help}${input}</fieldset>`;
+    const ops = q.options.map(o =>
+      `<label class="op"><input type="${q.type}" name="${name}" value="${escapeHtml(o)}" ${vals.includes(o) ? "checked" : ""}> ${escapeHtml(o)}</label>`).join("");
+    return `<div class="sep" data-q="${q.id}"><fieldset class="bloque"><legend>${escapeHtml(q.label)}${opt}</legend>${help}${ops}</fieldset></div>`;
   }
-  if (q.type === "textarea") input = `<textarea id="${name}" rows="3" maxlength="1000">${escapeHtml(value || "")}</textarea>`;
-  else input = `<input id="${name}" maxlength="200" value="${escapeHtml(value || "")}">`;
-  return `<div class="field" data-q="${q.id}"><label for="${name}">${escapeHtml(q.label)}${req}</label>${help}${input}</div>`;
+  const input = q.type === "textarea"
+    ? `<textarea class="campo" id="${name}" rows="4" maxlength="1000">${escapeHtml(value || "")}</textarea>`
+    : `<input class="campo" id="${name}" maxlength="200" value="${escapeHtml(value || "")}">`;
+  return `<div class="sep" data-q="${q.id}"><label class="etq" for="${name}">${escapeHtml(q.label)}${opt}</label>${help}${input}</div>`;
 }
 
 function attendeeHtml(a, i) {
   return `
-  <div class="attendee">
-    <div class="attendee-head"><span>Persona ${i + 1}</span>${i > 0 ? '<button type="button" class="link-btn remove">Quitar</button>' : ""}</div>
-    <div class="attendee-grid">
-      <div class="field"><label>Nombre y apellidos</label><input class="a-name" maxlength="80" value="${escapeHtml(a.name || "")}"></div>
-      <div class="field"><label>Menú</label><select class="a-menu">${MENUS.map(m => `<option ${a.menu === m ? "selected" : ""}>${m}</option>`).join("")}</select></div>
-    </div>
-    <div class="field"><label>Alergias o intolerancias <span class="optional">(si no hay, déjalo vacío)</span></label><input class="a-allergies" maxlength="200" value="${escapeHtml(a.allergies || "")}" placeholder="Ej.: celiaquía, frutos secos, vegetariano…"></div>
+  <div class="persona attendee">
+    <div class="persona__cabecera"><span class="persona__titulo">PERSONA ${i + 1}</span>${i > 0 ? '<button type="button" class="btn-quitar remove">Quitar</button>' : ""}</div>
+    <label><span class="etq">Nombre y apellidos</span><input class="campo a-name" maxlength="80" value="${escapeHtml(a.name || "")}"></label>
+    <label><span class="etq">Menú</span><select class="campo a-menu">${MENUS.map(m => `<option ${a.menu === m ? "selected" : ""}>${m}</option>`).join("")}</select></label>
+    <label><span class="etq">Alergias o intolerancias <span class="opcional">(si no hay, déjalo vacío)</span></span><input class="campo a-allergies" maxlength="200" value="${escapeHtml(a.allergies || "")}" placeholder="Ej.: celiaquía, frutos secos, vegetariano…"></label>
   </div>`;
 }
 
@@ -141,7 +101,7 @@ function readAnswers() {
 }
 
 async function renderForm(s) {
-  root.innerHTML = `<div class="panel"><p>Cargando&hellip;</p></div>`;
+  root.innerHTML = `<div class="tarjeta"><p>Cargando&hellip;</p></div>`;
   let saved = null;
   try { saved = await loadRsvp(); } catch (e) { console.error(e); }
 
@@ -150,31 +110,30 @@ async function renderForm(s) {
   const answers = saved?.answers || {};
 
   root.innerHTML = `
-  <div class="panel">
-    ${saved ? `<p class="notice" style="margin-bottom:20px;">Ya nos enviaste tu respuesta${saved.updatedAt ? " el " + formatDate(saved.updatedAt) : ""}. Puedes cambiarla cuando quieras y volver a guardar.</p>` : ""}
-    <form class="stack" id="rsvp-form" novalidate>
-      <fieldset class="field" style="border:none;">
-        <legend style="font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--olive); margin-bottom:6px;">¿Vendréis?</legend>
-        <div class="radio-row">
-          <label><input type="radio" name="attending" value="si" ${attending === "si" ? "checked" : ""}> Sí, allí estaremos</label>
-          <label><input type="radio" name="attending" value="no" ${attending === "no" ? "checked" : ""}> No podremos ir</label>
-        </div>
-      </fieldset>
+  <form class="tarjeta formulario" id="rsvp-form" novalidate>
+    ${saved ? `<p class="aviso">Ya nos enviaste tu respuesta${saved.updatedAt ? " el " + formatDate(saved.updatedAt) : ""}. Puedes cambiarla cuando quieras y volver a guardar.</p>` : ""}
+    <fieldset class="bloque">
+      <legend>¿Vendréis?</legend>
+      <label class="op"><input type="radio" name="attending" value="si" ${attending === "si" ? "checked" : ""}> Sí, allí estaremos</label>
+      <label class="op"><input type="radio" name="attending" value="no" ${attending === "no" ? "checked" : ""}> No podremos ir</label>
+    </fieldset>
 
-      <div id="yes-part" class="stack" ${attending === "si" ? "" : "hidden"}>
-        <div class="field" style="margin-bottom:-6px;"><label>¿Quiénes venís?</label><span class="help">Una ficha por persona, incluida tú o tú mismo. Así sabremos los menús y las alergias de cada uno.</span></div>
-        <div id="attendees" class="stack">${attendees.map(attendeeHtml).join("")}</div>
-        <div><button type="button" class="btn ghost small" id="add">+ Añadir persona</button></div>
-        ${QUESTIONS.filter(q => q.id !== "comentarios").map(q => questionHtml(q, answers[q.id])).join("")}
+    <div id="yes-part" class="formulario__parte" ${attending === "si" ? "" : "hidden"}>
+      <div class="sep">
+        <h2>¿Quiénes venís?</h2>
+        <p class="ayuda">Una ficha por persona, incluida tú o tú mismo. Así sabremos los menús y las alergias de cada uno.</p>
+        <div id="attendees" class="personas">${attendees.map(attendeeHtml).join("")}</div>
+        <p style="margin:18px 0 0;"><button type="button" class="btn btn--ghost" id="add">+ Añadir persona</button></p>
       </div>
-      ${QUESTIONS.filter(q => q.id === "comentarios").map(q => questionHtml(q, answers[q.id])).join("")}
+      ${QUESTIONS.filter(q => q.id !== "comentarios").map(q => questionHtml(q, answers[q.id])).join("")}
+    </div>
+    ${QUESTIONS.filter(q => q.id === "comentarios").map(q => questionHtml(q, answers[q.id])).join("")}
 
-      <div class="row-actions">
-        <button class="btn" type="submit" id="save">${saved ? "Guardar cambios" : "Enviar confirmación"}</button>
-      </div>
-      <div class="form-msg" id="msg"></div>
-    </form>
-  </div>`;
+    <div class="acciones">
+      <button class="btn" type="submit" id="save" style="font-size:34px;">${saved ? "Guardar cambios" : "Enviar confirmación"}</button>
+      <p class="form-msg" id="msg" role="status"></p>
+    </div>
+  </form>`;
 
   const yesPart = document.getElementById("yes-part");
   const list = document.getElementById("attendees");
@@ -182,7 +141,7 @@ async function renderForm(s) {
   const setMsg = (t, k) => { msg.textContent = t; msg.className = "form-msg" + (k ? " " + k : ""); };
 
   const renumber = () => {
-    [...list.children].forEach((el, i) => { el.querySelector(".attendee-head span").textContent = "Persona " + (i + 1); });
+    [...list.children].forEach((el, i) => { el.querySelector(".persona__titulo").textContent = "PERSONA " + (i + 1); });
     document.getElementById("add").hidden = list.children.length >= MAX_ATTENDEES;
   };
   list.addEventListener("click", e => {
@@ -230,10 +189,12 @@ async function renderForm(s) {
 
 onSession(s => {
   const gate = gateMessage(s, "confirmar tu asistencia");
-  if (gate) root.innerHTML = `<div class="panel">${gate}</div>`;
+  if (gate) root.innerHTML = `<div class="tarjeta">${gate}</div>`;
   else renderForm(s);
 });
 </script>
 
+<script src="menu.js"></script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>

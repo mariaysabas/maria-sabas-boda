@@ -3,88 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Novedades — María & Sabas</title>
+<title>Novedades — María &amp; Sabas</title>
+<link rel="icon" href="assets/monograma.webp" type="image/webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Caveat:wght@400;600;700&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-<nav>
-  <div class="wrap">
-    <a class="brand" href="index.html">
-      <svg class="sunflower-logo" width="26" height="26" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <g stroke="currentColor" stroke-width="1.6">
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
-  </g>
-  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
-  <g fill="currentColor">
-    <circle cx="24" cy="21" r="0.9"/>
-    <circle cx="27" cy="23" r="0.9"/>
-    <circle cx="26" cy="26.5" r="0.9"/>
-    <circle cx="22" cy="26.5" r="0.9"/>
-    <circle cx="21" cy="23" r="0.9"/>
-    <circle cx="24" cy="24" r="0.9"/>
-  </g>
-</svg>
-      M &amp; S
-    </a>
-    <button class="nav-toggle" aria-label="Abrir menú" onclick="document.getElementById('navlinks').classList.toggle('open')">&#9776;</button>
-    <ul id="navlinks">
-      <li><a href="index.html">Inicio</a></li>
-      <li><a href="historia.html">Nuestra Historia</a></li>
-      <li><a href="detalles.html">Detalles</a></li>
-      <li><a href="viaje.html">Alojamiento</a></li>
-      <li><a href="galeria.html">Galería</a></li>
-      <li><a href="games.html">Juegos</a></li>
-      <li><a href="confirmacion.html">Confirmación</a></li>
-    </ul>
-  </div>
+<!-- Menú de escritorio -->
+<nav class="nav-wide" aria-label="Menú principal">
+  <a href="index.html">Inicio</a>
+  <a href="historia.html">Nuestra Historia</a>
+  <a href="detalles.html">Detalles</a>
+  <a href="viaje.html">Alojamiento</a>
+  <a href="galeria.html">Galería</a>
+  <a href="games.html">Juegos</a>
+  <a href="confirmacion.html">Confirmación</a>
 </nav>
 
+<!-- Menú móvil -->
+<header class="nav-narrow">
+  <button class="nav-toggle" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="navlinks">
+    <svg class="icono-abrir" aria-hidden="true" width="26" height="22" viewBox="0 0 26 22" fill="none"><path d="M2 4 C 8 2, 16 5, 24 3" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M2 11 C 9 9, 16 12, 24 10" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M2 18 C 8 16, 17 19, 24 17" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/></svg>
+    <svg class="icono-cerrar" aria-hidden="true" width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 3 C 8 8, 14 14, 19 19" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/><path d="M19 3 C 14 8, 8 14, 3 19" stroke="#6B6B21" stroke-width="3" stroke-linecap="round"/></svg>
+  </button>
+  <nav class="nav-panel" id="navlinks" aria-label="Menú">
+    <a href="index.html">Inicio</a>
+    <a href="historia.html">Nuestra Historia</a>
+    <a href="detalles.html">Detalles</a>
+    <a href="viaje.html">Alojamiento</a>
+    <a href="galeria.html">Galería</a>
+    <a href="games.html">Juegos</a>
+    <a href="confirmacion.html">Confirmación</a>
+  </nav>
+</header>
 
-<div class="page-header">
-  <div class="eyebrow">Para nuestros invitados</div>
-  <h1>Novedades</h1>
-</div>
-<main>
-<section>
-  <div class="wrap" id="news-root">
-    <div class="panel"><p>Cargando&hellip;</p></div>
-  </div>
-</section>
+<main class="pagina pagina--formulario">
+  <h1 class="titulo-pagina">NOVEDADES</h1>
+  <div class="pila" id="news-root"><div class="panel"><p>Cargando&hellip;</p></div></div>
 </main>
-
-<footer>
-  <svg class="sunflower-logo" width="22" height="22" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <g stroke="currentColor" stroke-width="1.6">
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(0 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(45 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(90 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(135 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(180 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(225 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(270 24 24)"/>
-    <ellipse cx="24" cy="9" rx="3.6" ry="8.5" transform="rotate(315 24 24)"/>
-  </g>
-  <circle cx="24" cy="24" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/>
-  <g fill="currentColor">
-    <circle cx="24" cy="21" r="0.9"/>
-    <circle cx="27" cy="23" r="0.9"/>
-    <circle cx="26" cy="26.5" r="0.9"/>
-    <circle cx="22" cy="26.5" r="0.9"/>
-    <circle cx="21" cy="23" r="0.9"/>
-    <circle cx="24" cy="24" r="0.9"/>
-  </g>
-</svg>
-  <div class="eyebrow" style="margin-top:10px;">María &amp; Sabas</div>
-  <div>24 de abril, 2027 &middot; Salamanca</div>
-</footer>
 
 <script type="module">
 import { onSession, gateMessage, db, collection, getDocs, query, orderBy, escapeHtml, formatDate } from "./auth.js";
@@ -107,5 +66,7 @@ onSession(async s => {
 });
 </script>
 
+<script src="menu.js"></script>
+<script type="module" src="auth.js"></script>
 </body>
 </html>
