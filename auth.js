@@ -34,6 +34,17 @@ export { auth, db };
 // Las páginas de administración y novedades usan estas funciones de Firestore directamente.
 export { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, collectionGroup, getDocs, addDoc, query, orderBy, serverTimestamp, writeBatch };
 
+// ---------- código de invitación en el enlace ----------
+// Si alguien entra por mariaysabas.es/?codigo=XXXX (por ejemplo, desde el QR de la invitación),
+// se recuerda el código en este navegador y se rellena solo al crear la cuenta.
+try {
+  const c = new URLSearchParams(location.search).get("codigo");
+  if (c) localStorage.setItem("inviteCode", c.trim());
+} catch (e) { /* sin almacenamiento: habrá que escribirlo a mano */ }
+export function savedInviteCode() {
+  try { return localStorage.getItem("inviteCode") || ""; } catch (e) { return ""; }
+}
+
 // ---------- estado de la sesión ----------
 // user: usuario de Firebase (o null) · profile: datos de users/{uid} (o null)
 // needsVerification: cuenta con email+contraseña cuyo email aún no está verificado

@@ -90,7 +90,7 @@
 import {
   configured, onSession, getSession, refreshSession, signInGoogle, signUpEmail, signInEmail,
   resendVerification, resetPassword, logout, createProfile, redeemInviteCode, updateRealName,
-  changeUsername, deleteAccount, loadMyScores, anyErrorText, errorText, escapeHtml, auth
+  changeUsername, deleteAccount, loadMyScores, anyErrorText, errorText, escapeHtml, auth, savedInviteCode
 } from "./auth.js";
 
 // Nombres que se muestran para cada juego en la tabla de puntuaciones.
@@ -227,7 +227,7 @@ function renderProfileForm(s) {
       </div>
       <div class="field">
         <label for="code">Código de invitación <span class="optional">(opcional)</span></label>
-        <input id="code" maxlength="40" autocomplete="off">
+        <input id="code" maxlength="40" autocomplete="off" value="${escapeHtml(savedInviteCode())}">
         <span class="help">Viene en vuestra invitación. Con él tu cuenta queda activada al momento; sin él, tendrás que esperar a que la aprobemos.</span>
       </div>
       <div class="notice">Solo guardamos tu email, tu nombre, tu nombre de usuario, tus respuestas al formulario de confirmación y tus puntuaciones, y solo para la boda. Puedes borrar tu cuenta y todos tus datos cuando quieras desde esta página.</div>
@@ -274,7 +274,7 @@ async function renderProfile(s) {
     ${codeRejected ? '<p class="form-msg error" style="margin-bottom:14px;">El código de invitación no era correcto, así que la cuenta ha quedado pendiente. Puedes volver a intentarlo aquí.</p>' : ""}
     ${p.status === "pending" ? `
     <form class="row-actions" id="code-form" style="margin-bottom:20px;" novalidate>
-      <div class="field" style="flex:1; min-width:180px;"><label for="code">Código de invitación</label><input id="code" maxlength="40" autocomplete="off"></div>
+      <div class="field" style="flex:1; min-width:180px;"><label for="code">Código de invitación</label><input id="code" maxlength="40" autocomplete="off" value="${escapeHtml(savedInviteCode())}"></div>
       <button class="btn" type="submit" id="code-btn" style="align-self:flex-end;">Activar</button>
     </form>
     <p class="form-msg" id="code-msg"></p>` : ""}
