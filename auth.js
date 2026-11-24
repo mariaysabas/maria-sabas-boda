@@ -35,11 +35,14 @@ export { auth, db };
 export { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, collectionGroup, getDocs, addDoc, query, orderBy, serverTimestamp, writeBatch };
 
 // ---------- código de invitación en el enlace ----------
-// Si alguien entra por mariaysabas.es/?codigo=XXXX (por ejemplo, desde el QR de la invitación),
+// Si alguien entra por mariaysabas.es/?CODIGO (por ejemplo, desde el QR de la invitación),
 // se recuerda el código en este navegador y se rellena solo al crear la cuenta.
+// También vale la forma larga mariaysabas.es/?codigo=CODIGO.
 try {
-  const c = new URLSearchParams(location.search).get("codigo");
-  if (c) localStorage.setItem("inviteCode", c.trim());
+  const raw = location.search.slice(1);
+  let c = new URLSearchParams(location.search).get("codigo");
+  if (!c && /^[A-Za-z0-9_-]{3,40}$/.test(raw)) c = raw;
+  if (c) localStorage.setItem("inviteCode", c.trim().toUpperCase());
 } catch (e) { /* sin almacenamiento: habrá que escribirlo a mano */ }
 export function savedInviteCode() {
   try { return localStorage.getItem("inviteCode") || ""; } catch (e) { return ""; }
